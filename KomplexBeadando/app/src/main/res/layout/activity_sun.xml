@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:backgroundTint="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.SunActivity">
+
+    <ImageView
+        android:id="@+id/img_sunbuttonbg"
+        android:layout_width="160dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gradientelement" />
+
+    <ImageView
+        android:id="@+id/img_horoscopebuttonbg"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="76dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gradientelement" />
+
+    <ImageView
+        android:id="@+id/img_cimhatter"
+        android:layout_width="347dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="-15dp"
+        android:layout_marginEnd="33dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bordergradientelement"
+        tools:srcCompat="@drawable/bordergradientelement" />
+
+    <TextView
+        android:id="@+id/txt_UserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Hello, user!"
+        android:textColor="@color/burgundy"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter" />
+
+    <TextView
+        android:id="@+id/txt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Todays date"
+        android:textColor="@color/burgundy"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter" />
+
+    <TextView
+        android:id="@+id/txt_sundial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Sundial"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_Sundial"
+        app:layout_constraintStart_toStartOf="@+id/btn_Sundial" />
+
+    <TextView
+        android:id="@+id/txt_horoscope"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Horoscope"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_Horoscope"
+        app:layout_constraintStart_toStartOf="@+id/btn_Horoscope" />
+
+    <ImageView
+        android:id="@+id/img_napicon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/txt_sundial"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_Sundial"
+        app:layout_constraintTop_toTopOf="@+id/txt_sundial"
+        app:srcCompat="@drawable/sunicon" />
+
+    <ImageView
+        android:id="@+id/img_horoscopeicon"
+        android:layout_width="24dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/btn_Horoscope"
+        app:layout_constraintTop_toTopOf="@+id/btn_Horoscope"
+        app:srcCompat="@drawable/horoscopeicon" />
+
+
+    <ImageButton
+        android:id="@+id/btn_settings"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter"
+        app:srcCompat="@drawable/gear" />
+
+    <Button
+        android:id="@+id/btn_Sundial"
+        android:layout_width="155dp"
+        android:layout_height="51dp"
+        android:backgroundTint="#00FFFFFF"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/img_sunbuttonbg"
+        app:layout_constraintStart_toStartOf="@+id/img_sunbuttonbg" />
+
+    <Button
+        android:id="@+id/btn_Horoscope"
+        android:layout_width="159dp"
+        android:layout_height="34dp"
+        android:backgroundTint="#00FFFFFF"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/img_horoscopebuttonbg"
+        app:layout_constraintStart_toStartOf="@+id/img_horoscopebuttonbg" />
+
+    <ImageButton
+        android:id="@+id/btn_notification"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/bellicon" />
+
+    <ImageButton
+        android:id="@+id/btn_gallery"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/galleryicon" />
+
+    <TextView
+        android:id="@+id/txt_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="120dp"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="Your current location is: xx"
+        android:textColor="@color/orange"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_arch"
+        android:layout_width="297dp"
+        android:layout_height="159dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_sunrise"
+        app:layout_constraintEnd_toEndOf="@+id/img_sunset"
+        app:layout_constraintStart_toStartOf="@+id/img_sunrise"
+        app:srcCompat="@drawable/halfcircle" />
+
+    <ImageView
+        android:id="@+id/img_compass"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_camera"
+        app:layout_constraintVertical_bias="0.47"
+        app:srcCompat="@drawable/compassframe" />
+
+    <ImageView
+        android:id="@+id/img_sunset"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.942"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sunicon2" />
+
+    <TextView
+        android:id="@+id/txt_sunriseTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="00:00"
+        android:textColor="@color/orange"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/img_sunrise"
+        app:layout_constraintTop_toBottomOf="@+id/img_sunrise" />
+
+    <TextView
+        android:id="@+id/txt_sunsetTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="00:00"
+        android:textColor="@color/orange"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/img_sunset"
+        app:layout_constraintTop_toBottomOf="@+id/img_sunset" />
+
+    <ImageView
+        android:id="@+id/img_sunrise"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sunicon2" />
+
+    <ImageButton
+        android:id="@+id/btn_camera"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_arch"
+        app:srcCompat="@drawable/cameraicon" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

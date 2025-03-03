@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.HoroscopeActivity">
+
+    <ImageView
+        android:id="@+id/img_sunbuttonbg"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="76dp"
+        app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gradientelement" />
+
+    <ImageView
+        android:id="@+id/img_horoscopebuttonbg"
+        android:layout_width="160dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gradientelement" />
+
+    <ImageView
+        android:id="@+id/img_cimhatter"
+        android:layout_width="347dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="-15dp"
+        android:layout_marginEnd="33dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bordergradientelement"
+        tools:srcCompat="@drawable/bordergradientelement" />
+
+    <TextView
+        android:id="@+id/txt_UserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Hello, user!"
+        android:textColor="@color/burgundy"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter" />
+
+    <TextView
+        android:id="@+id/txt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Todays date"
+        android:textColor="@color/burgundy"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter" />
+
+    <ImageButton
+        android:id="@+id/btn_settings"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter"
+        app:srcCompat="@drawable/gear" />
+
+    <TextView
+        android:id="@+id/txt_sundial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Sundial"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_Sundial"
+        app:layout_constraintStart_toStartOf="@+id/btn_Sundial" />
+
+    <TextView
+        android:id="@+id/txt_horoscope"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Horoscope"
+        android:textColor="@color/white"
+        android:textSize="21dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_Horoscope"
+        app:layout_constraintStart_toStartOf="@+id/btn_Horoscope" />
+
+    <ImageView
+        android:id="@+id/img_napicon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/txt_sundial"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_Sundial"
+        app:layout_constraintTop_toTopOf="@+id/txt_sundial"
+        app:srcCompat="@drawable/sunicon" />
+
+    <ImageView
+        android:id="@+id/img_horoscopeicon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="13dp"
+        app:layout_constraintStart_toStartOf="@+id/btn_Horoscope"
+        app:layout_constraintTop_toTopOf="@+id/btn_Horoscope"
+        app:srcCompat="@drawable/horoscopeicon" />
+
+    <ImageView
+        android:id="@+id/img_tab1"
+        android:layout_width="40dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="296dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
+        app:srcCompat="@drawable/horoscopetab" />
+
+
+    <ImageView
+        android:id="@+id/img_tab2"
+        android:layout_width="40dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="296dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintTop_toBottomOf="@+id/img_tab1"
+        app:srcCompat="@drawable/horoscopetab" />
+
+    <ImageView
+        android:id="@+id/img_tab3"
+        android:layout_width="40dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="296dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintTop_toBottomOf="@+id/img_tab2"
+        app:srcCompat="@drawable/horoscopetab" />
+
+    <ImageView
+        android:id="@+id/img_horoscopeMainTextBg"
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.684"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_horoscopeicon"
+        app:layout_constraintVertical_bias="0.503"
+        app:srcCompat="@drawable/corneredbordergradientelement" />
+
+    <TextView
+        android:id="@+id/txt_horoscopeDescription"
+        android:layout_width="270dp"
+        android:layout_height="320dp"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="lorem ipsum"
+        android:textColor="@color/burgundy"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintStart_toStartOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintVertical_bias="0.861" />
+
+    <ImageView
+        android:id="@+id/img_zodiacSign"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintStart_toStartOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintVertical_bias="0.062"
+        app:srcCompat="@drawable/galleryicon" />
+
+    <TextView
+        android:id="@+id/txt_zodiacSign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bricolage_grotesque_extrabold"
+        android:text="Saggittarius"
+        android:textColor="@color/burgundy"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintHorizontal_bias="0.76"
+        app:layout_constraintStart_toStartOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintVertical_bias="0.03" />
+
+    <TextView
+        android:id="@+id/txt_typeIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text="Monthly"
+        android:textColor="@color/burgundy"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/txt_zodiacSign"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="@+id/txt_zodiacSign"
+        app:layout_constraintTop_toBottomOf="@+id/txt_zodiacSign" />
+
+    <TextView
+        android:id="@+id/txt_tab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:text="Daily"
+        android:textColor="@color/white"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_tab1"
+        app:layout_constraintEnd_toEndOf="@+id/img_tab1"
+        app:layout_constraintStart_toStartOf="@+id/img_tab1"
+        app:layout_constraintTop_toTopOf="@+id/img_tab1" />
+
+    <TextView
+        android:id="@+id/txt_tab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:text="Weekly"
+        android:textColor="@color/white"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_tab2"
+        app:layout_constraintEnd_toEndOf="@+id/img_tab2"
+        app:layout_constraintStart_toStartOf="@+id/img_tab2"
+        app:layout_constraintTop_toTopOf="@+id/img_tab2" />
+
+    <TextView
+        android:id="@+id/txt_tab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:text="Monthly"
+        android:textColor="@color/white"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_tab3"
+        app:layout_constraintEnd_toEndOf="@+id/img_tab3"
+        app:layout_constraintStart_toStartOf="@+id/img_tab3"
+        app:layout_constraintTop_toTopOf="@+id/img_tab3" />
+
+
+
+
+    <Button
+        android:id="@+id/btn_Sundial"
+        android:layout_width="155dp"
+        android:layout_height="34dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/img_sunbuttonbg"
+        app:layout_constraintStart_toStartOf="@+id/img_sunbuttonbg" />
+
+    <Button
+        android:id="@+id/btn_Horoscope"
+        android:layout_width="159dp"
+        android:layout_height="51dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/img_horoscopebuttonbg"
+        app:layout_constraintStart_toStartOf="@+id/img_horoscopebuttonbg" />
+
+    <Button
+        android:id="@+id/btn_DailyTab"
+        android:layout_width="40dp"
+        android:layout_height="130dp"
+        android:text=""
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/img_tab1"
+        app:layout_constraintEnd_toEndOf="@+id/img_tab1"
+        app:layout_constraintStart_toStartOf="@+id/img_tab1"
+        app:layout_constraintTop_toTopOf="@+id/img_tab1" />
+
+    <Button
+        android:id="@+id/btn_WeeklyTab"
+        android:layout_width="40dp"
+        android:layout_height="130dp"
+        android:text=""
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/img_tab2"
+        app:layout_constraintEnd_toEndOf="@+id/img_tab2"
+        app:layout_constraintStart_toStartOf="@+id/img_tab2"
+        app:layout_constraintTop_toTopOf="@+id/img_tab2" />
+
+    <Button
+        android:id="@+id/btn_MonthlyTab"
+        android:layout_width="40dp"
+        android:layout_height="130dp"
+        android:text=""
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/img_tab3"
+        app:layout_constraintEnd_toEndOf="@+id/img_tab3"
+        app:layout_constraintStart_toStartOf="@+id/img_tab3"
+        app:layout_constraintTop_toTopOf="@+id/img_tab3" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
