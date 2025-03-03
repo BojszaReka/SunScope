@@ -277,7 +277,8 @@
         android:layout_height="34dp"
         android:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/img_sunbuttonbg"
-        app:layout_constraintStart_toStartOf="@+id/img_sunbuttonbg" />
+        app:layout_constraintStart_toStartOf="@+id/img_sunbuttonbg"
+        android:onClick="redirectSundial"/>
 
     <Button
         android:id="@+id/btn_Horoscope"

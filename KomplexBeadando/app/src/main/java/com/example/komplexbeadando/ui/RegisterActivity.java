@@ -72,6 +72,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             String result = FileHandler.Register(username, psw, selectedDate, path, remember);
             if(result.charAt(0) == '@'){
                 Log.d(TAG, "Registered: "+result);
+                Intent intent = new Intent(RegisterActivity.this, SunActivity.class);
+                SunActivity.loggedInUser = result;
+                startActivity(intent);
             }else{
                 Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }

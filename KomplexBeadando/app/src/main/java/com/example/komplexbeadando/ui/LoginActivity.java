@@ -60,6 +60,11 @@ public class LoginActivity extends AppCompatActivity {
             String result = FileHandler.Login(username, psw, path, remember);
             if(result.charAt(0) == '@'){
                 Log.d(TAG, "Logged in: "+result);
+
+                Intent intent = new Intent(LoginActivity.this, SunActivity.class);
+                SunActivity.loggedInUser = result;
+                startActivity(intent);
+
             }else{
                 Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }

@@ -147,7 +147,8 @@
         android:fontFamily="@font/bricolage_grotesque_medium"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/img_horoscopebuttonbg"
-        app:layout_constraintStart_toStartOf="@+id/img_horoscopebuttonbg" />
+        app:layout_constraintStart_toStartOf="@+id/img_horoscopebuttonbg"
+        android:onClick="redirectHoroscope"/>
 
     <ImageButton
         android:id="@+id/btn_notification"
