@@ -69,4 +69,12 @@ public class HoroscopeActivity extends AppCompatActivity {
         finish();
     }
 
+    public void settingButtonClicked(View view) {
+        FileHandler.LogOut();
+        Intent intent = new Intent(HoroscopeActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
+    }
+
 }

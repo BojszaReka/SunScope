@@ -56,7 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         if(FileHandler.isRememberedUser(path)){
             String userdata = FileHandler.rememberedUser();
             userdata = userdata.substring(1);
-            LoginProcess(userdata);
+            if(userdata != null && !userdata.isBlank() && !userdata.isEmpty()){
+                LoginProcess(userdata);
+            }
         }
     }
 

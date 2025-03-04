@@ -132,16 +132,27 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     }
 
     private void userDataConversion() {
-        String liu = loggedInUser.substring(1);
-        String[] st = liu.split(";");
-        username = st[0];
-        horoscope = st[1];
+        if (loggedInUser != null && loggedInUser.length() > 1){
+            String liu = loggedInUser.substring(1);
+            String[] st = liu.split(";");
+            username = st[0];
+            horoscope = st[1];
+        }
+
     }
 
     public void redirectHoroscope(View view) {
         Intent intent = new Intent(SunActivity.this, HoroscopeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         HoroscopeActivity.loggedInUser = loggedInUser;
+        startActivity(intent);
+        finish();
+    }
+
+    public void settingButtonClicked(View view) {
+        FileHandler.LogOut();
+        Intent intent = new Intent(SunActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
     }
@@ -246,4 +257,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     public void onProviderDisabled(@NonNull String provider) {
         LocationListener.super.onProviderDisabled(provider);
     }
+
+
 }

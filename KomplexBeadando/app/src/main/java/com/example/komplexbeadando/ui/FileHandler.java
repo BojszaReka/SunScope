@@ -193,9 +193,9 @@ public class FileHandler {
     }
 
     public static String rememberUser(User u, Boolean rememberUser){
-        Log.d(TAG, "RememberUser method: "+rememberUser+" "+u.toString());
-        String user = "@"+u.getUsername()+";"+u.getHoroscope();
         if(rememberUser){
+            Log.d(TAG, "RememberUser method: "+rememberUser+" "+u.toString());
+            String user = "@"+u.getUsername()+";"+u.getHoroscope();
             return writeFile(rememberFile, user);
         }
         return null;
@@ -218,7 +218,7 @@ public class FileHandler {
 
     public static String rememberedUser(){
         String filecontent = readFile(rememberFile);
-        if(filecontent == null){
+        if(filecontent == null || filecontent.isEmpty() || filecontent.isBlank()){
             return  null;
         }else if(filecontent.charAt(0) == '@'){
             if(filecontent.substring(1)!= null){
@@ -231,4 +231,7 @@ public class FileHandler {
     }
 
 
+    public static void LogOut() {
+        writeFile(rememberFile, "");
+    }
 }

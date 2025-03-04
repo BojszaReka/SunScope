@@ -127,6 +127,7 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/white"
         android:scaleType="fitCenter"
+        android:onClick="settingButtonClicked"
         app:layout_constraintEnd_toEndOf="@+id/img_cimhatter"
         app:layout_constraintTop_toTopOf="@+id/img_cimhatter"
         app:srcCompat="@drawable/gear" />
