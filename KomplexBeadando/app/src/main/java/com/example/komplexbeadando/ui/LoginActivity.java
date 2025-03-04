@@ -106,6 +106,5 @@ public class LoginActivity extends AppCompatActivity {
 
     public void toggleRememeber(View view) {
         remember = !remember;
-        Log.d(TAG, "Remember: "+remember);
     }
 }
