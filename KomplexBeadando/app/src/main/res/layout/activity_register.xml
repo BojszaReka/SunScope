@@ -107,6 +107,9 @@
         android:text="Remember me"
         android:textColor="@color/burgundy"
         android:textSize="13sp"
+        android:checked="false"
+        android:clickable="true"
+        android:onClick="toggleRememeber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txf_Password" />

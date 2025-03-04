@@ -41,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     String selectedDate;
     CheckBox chb_remember;
 
+    Boolean remember = false;
+
     private File path;
 
     @Override
@@ -53,19 +55,24 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        initializeActivity();
+    }
+
+    private void initializeActivity() {
         txf_Usename = findViewById(R.id.txf_Username);
         txf_Password = findViewById(R.id.txf_Password);
         btn_toggle = findViewById(R.id.btn_viewPsw);
         btn_pickDate = findViewById(R.id.btn_pickDate);
         chb_remember = findViewById(R.id.chb_remember);
+
         path = getApplicationContext().getFilesDir();
+
         selectedDate = null;
     }
 
     public void Register(View view) {
         String username = txf_Usename.getText().toString();
         String psw = txf_Password.getText().toString();
-        Boolean remember = chb_remember.isActivated();
         if( username.equals(null) || psw.equals(null) || username.equals("") || psw.equals("") || username.equals(" ") || psw.equals(" ") || selectedDate.equals(null)){
             Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
         }else{
@@ -73,8 +80,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             if(result.charAt(0) == '@'){
                 Log.d(TAG, "Registered: "+result);
                 Intent intent = new Intent(RegisterActivity.this, SunActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 SunActivity.loggedInUser = result;
                 startActivity(intent);
+                finish();
             }else{
                 Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }
@@ -84,7 +93,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     public void Login(View view) {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        finish();
     }
 
     public void togglePsw(View view) {
@@ -114,5 +125,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(mCalendar.getTime());
         btn_pickDate.setText(selectedDate);
 
+    }
+
+    public void toggleRememeber(View view) {
+        remember = !remember;
     }
 }

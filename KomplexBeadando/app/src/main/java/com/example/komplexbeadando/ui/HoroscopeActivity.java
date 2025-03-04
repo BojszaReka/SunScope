@@ -37,28 +37,36 @@ public class HoroscopeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        parse();
-        txt_UserName = findViewById(R.id.txt_UserName);
-        txt_UserName.setText("Hello, "+username);
+        initializeActivity();
 
+    }
+
+    public void initializeActivity(){
+        userDataConversion();
+
+        txt_UserName = findViewById(R.id.txt_UserName);
         txt_todaysDate = findViewById(R.id.txt_date);
+
         Date d = new Date();
         CharSequence s  = DateFormat.format("MMMM d", d.getTime());
+
+        txt_UserName.setText("Hello, "+username);
         txt_todaysDate.setText(s);
-
-
     }
 
-    public void redirectSundial(View view) {
-        Intent intent = new Intent(HoroscopeActivity.this, SunActivity.class);
-        SunActivity.loggedInUser = loggedInUser;
-        startActivity(intent);
-    }
-
-    public void parse(){
+    private void userDataConversion() {
         String liu = loggedInUser.substring(1);
         String[] st = liu.split(";");
         username = st[0];
         horoscope = st[1];
     }
+
+    public void redirectSundial(View view) {
+        Intent intent = new Intent(HoroscopeActivity.this, SunActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        SunActivity.loggedInUser = loggedInUser;
+        startActivity(intent);
+        finish();
+    }
+
 }

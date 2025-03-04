@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean showPassword = false;
     ImageButton btn_toggle;
     CheckBox chb_remember;
-
+    Boolean remember = false;
     private File path;
 
     @Override
@@ -42,38 +42,54 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        FileHandler.writeEmpty();
+        initializeActivity();
+    }
+
+    private void initializeActivity() {
         txf_Usename = findViewById(R.id.txf_Username);
         txf_Password = findViewById(R.id.txf_Password);
         btn_toggle = findViewById(R.id.btn_viewPsw);
         chb_remember = findViewById(R.id.chb_remember);
+
         path = getApplicationContext().getFilesDir();
+
+        if(FileHandler.isRememberedUser(path)){
+            String userdata = FileHandler.rememberedUser();
+            userdata = userdata.substring(1);
+            LoginProcess(userdata);
+        }
     }
 
     public void Login(View view) {
         String username = txf_Usename.getText().toString();
         String psw = txf_Password.getText().toString();
-        Boolean remember = chb_remember.isActivated();
         if( username.equals(null) || psw.equals(null) || username.equals("") || psw.equals("") || username.equals(" ") || psw.equals(" ")){
             Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
         }else{
             String result = FileHandler.Login(username, psw, path, remember);
             if(result.charAt(0) == '@'){
-                Log.d(TAG, "Logged in: "+result);
-
-                Intent intent = new Intent(LoginActivity.this, SunActivity.class);
-                SunActivity.loggedInUser = result;
-                startActivity(intent);
-
+                LoginProcess(result);
             }else{
                 Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }
         }
     }
 
+    public void LoginProcess(String userdata){
+        Log.d(TAG, "Logged in: "+userdata);
+
+        Intent intent = new Intent(LoginActivity.this, SunActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        SunActivity.loggedInUser = userdata;
+        startActivity(intent);
+        finish();
+    }
+
     public void Register(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        finish();
     }
 
     public void togglePsw(View view) {
@@ -86,5 +102,10 @@ public class LoginActivity extends AppCompatActivity {
             btn_toggle.setImageResource(android.R.drawable.ic_menu_view);
         }
         txf_Password.setSelection(txf_Password.length());
+    }
+
+    public void toggleRememeber(View view) {
+        remember = !remember;
+        Log.d(TAG, "Remember: "+remember);
     }
 }

@@ -2,7 +2,6 @@ package com.example.komplexbeadando.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -47,37 +46,45 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        initialize();
-        txt_UserName = findViewById(R.id.txt_UserName);
-        txt_UserName.setText("Hello, "+username);
+        initializeActivity();
+        compassInitialization();
+    }
 
-
-        txt_todaysDate = findViewById(R.id.txt_date);
-        Date d = new Date();
-        CharSequence s  = DateFormat.format("MMMM d", d.getTime());
-        txt_todaysDate.setText(s);
-
-        //compass
+    private void compassInitialization() {
         img_compass = findViewById(R.id.img_compass);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-
     }
 
-    public void redirectHoroscope(View view) {
-        Intent intent = new Intent(SunActivity.this, HoroscopeActivity.class);
-        SunActivity.loggedInUser = loggedInUser;
-        startActivity(intent);
+    public void initializeActivity(){
+        userDataConversion();
+
+        txt_UserName = findViewById(R.id.txt_UserName);
+        txt_todaysDate = findViewById(R.id.txt_date);
+
+        Date d = new Date();
+        CharSequence s  = DateFormat.format("MMMM d", d.getTime());
+
+        txt_UserName.setText("Hello, "+username);
+        txt_todaysDate.setText(s);
     }
 
-    public void initialize(){
+    private void userDataConversion() {
         String liu = loggedInUser.substring(1);
         String[] st = liu.split(";");
         username = st[0];
         horoscope = st[1];
     }
+
+    public void redirectHoroscope(View view) {
+        Intent intent = new Intent(SunActivity.this, HoroscopeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        HoroscopeActivity.loggedInUser = loggedInUser;
+        startActivity(intent);
+        finish();
+    }
+
 
 
 

@@ -1,6 +1,10 @@
 package com.example.komplexbeadando.ui;
 
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -122,17 +126,41 @@ public class FileHandler {
     }
 
     public static String dataToList(){
-        File directory = new File(_path, dataFile);
-        if (!directory.exists()) {
-            directory.mkdirs(); // Create the directory if it doesn't exist
+
+        String data = readFile(dataFile);
+        if(data.charAt(0) == '@'){
+            data = data.substring(1);
+            if(data == null || data.equals("")){
+                return "File is empty"; //empty file
+            }else{
+                users.clear();
+                String[] st = data.split(";");
+                for (String s: st) {
+                    users.add(new User(s));
+                }
+                return null;
+            }
+
+        }else{
+            return data;
         }
-        FileInputStream stream = null;
+    }
+
+    private static String readFile(String file) {
+        File directory = new File(_path, file);
+        if (!directory.exists()) {
+            directory.mkdirs();
+            Log.d(TAG, file+" file got created");
+        }
         String data = "";
         try {
-            stream = new FileInputStream(directory);
+
+            FileInputStream stream = new FileInputStream(directory);
             byte[] content = new byte[(int) directory.length()];
             stream.read(content);
-            data = new String(content);
+            Log.d(TAG, file+" Read: "+new String(content));
+            String returned = "@"+new String(content);
+            return returned;
         } catch (FileNotFoundException e) {
             //throw new RuntimeException(e);
             return e.toString();
@@ -140,27 +168,20 @@ public class FileHandler {
             //throw new RuntimeException(e);
             return e.toString();
         }
-        if(data.equals("")){
-            return null; //empty file
-        }else{
-            users.clear();
-            String[] st = data.split(";");
-            for (String s: st) {
-                users.add(new User(s));
-            }
-            return null;
-        }
     }
+
 
     public static String writeFile(String file, String content){
         File directory = new File(_path, file);
         if (!directory.exists()) {
             directory.mkdirs(); // Create the directory if it doesn't exist
+            Log.d(TAG, file+" file got created");
         }
         try {
             FileOutputStream writer = new FileOutputStream(directory);
             writer.write(content.getBytes());
             writer.close();
+            Log.d(TAG, file+" wrote: "+content);
             return null;
         } catch (FileNotFoundException e) {
             //throw new RuntimeException(e);
@@ -172,6 +193,7 @@ public class FileHandler {
     }
 
     public static String rememberUser(User u, Boolean rememberUser){
+        Log.d(TAG, "RememberUser method: "+rememberUser+" "+u.toString());
         String user = "@"+u.getUsername()+";"+u.getHoroscope();
         if(rememberUser){
             return writeFile(rememberFile, user);
@@ -179,7 +201,34 @@ public class FileHandler {
         return null;
     }
 
+    public static boolean isRememberedUser(File path){
+        _path = path;
+        String filecontent = readFile(rememberFile);
+        if(filecontent == null){
+            return  false;
+        }else if(filecontent.charAt(0) == '@'){
+            if(filecontent.substring(1)!= null){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
 
+    public static String rememberedUser(){
+        String filecontent = readFile(rememberFile);
+        if(filecontent == null){
+            return  null;
+        }else if(filecontent.charAt(0) == '@'){
+            if(filecontent.substring(1)!= null){
+                return filecontent;
+            }else{
+                return null;
+            }
+        }
+        return null;
+    }
 
 
 }
