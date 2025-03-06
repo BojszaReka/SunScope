@@ -128,33 +128,33 @@
         app:layout_constraintTop_toTopOf="@+id/btn_Horoscope"
         app:srcCompat="@drawable/horoscopeicon" />
 
+
     <ImageView
         android:id="@+id/img_tab1"
-        android:layout_width="40dp"
-        android:layout_height="130dp"
+        android:layout_width="55dp"
+        android:layout_height="150dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="296dp"
+        android:layout_marginEnd="280dp"
         app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
         app:srcCompat="@drawable/horoscopetab" />
 
-
     <ImageView
         android:id="@+id/img_tab2"
-        android:layout_width="40dp"
-        android:layout_height="130dp"
+        android:layout_width="55dp"
+        android:layout_height="150dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="296dp"
+        android:layout_marginEnd="280dp"
         app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintTop_toBottomOf="@+id/img_tab1"
         app:srcCompat="@drawable/horoscopetab" />
 
     <ImageView
         android:id="@+id/img_tab3"
-        android:layout_width="40dp"
-        android:layout_height="130dp"
+        android:layout_width="55dp"
+        android:layout_height="150dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="296dp"
+        android:layout_marginEnd="280dp"
         app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintTop_toBottomOf="@+id/img_tab2"
         app:srcCompat="@drawable/horoscopetab" />
@@ -162,29 +162,38 @@
     <ImageView
         android:id="@+id/img_horoscopeMainTextBg"
         android:layout_width="300dp"
-        android:layout_height="450dp"
+        android:layout_height="550dp"
         android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.684"
+        app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_horoscopeicon"
-        app:layout_constraintVertical_bias="0.503"
+        app:layout_constraintTop_toBottomOf="@+id/img_horoscopebuttonbg"
+        app:layout_constraintVertical_bias="0.8"
         app:srcCompat="@drawable/corneredbordergradientelement" />
 
-    <TextView
-        android:id="@+id/txt_horoscopeDescription"
-        android:layout_width="270dp"
-        android:layout_height="320dp"
-        android:fontFamily="@font/bricolage_grotesque_medium"
-        android:text="lorem ipsum"
-        android:textColor="@color/burgundy"
-        android:textSize="12dp"
+    <ScrollView
+        android:id="@+id/scr_holder"
+        android:layout_width="267dp"
+        android:layout_height="399dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
+        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="@+id/img_horoscopeMainTextBg"
-        app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
-        app:layout_constraintVertical_bias="0.861" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_typeIndicator"
+        app:layout_constraintVertical_bias="0.569">
+
+        <TextView
+            android:id="@+id/txt_horoscopeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/bricolage_grotesque_medium"
+            android:text="Getting data..."
+            android:textAlignment="viewStart"
+            android:textColor="@color/burgundy"
+            android:textSize="18dp" />
+    </ScrollView>
 
     <ImageView
         android:id="@+id/img_zodiacSign"
@@ -192,38 +201,37 @@
         android:layout_height="65dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
-        app:layout_constraintVertical_bias="0.062"
+        app:layout_constraintVertical_bias="0.032"
         app:srcCompat="@drawable/galleryicon" />
 
     <TextView
         android:id="@+id/txt_zodiacSign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bricolage_grotesque_extrabold"
+        android:fontFamily="@font/bricolage_grotesque_semibold"
         android:text="Saggittarius"
         android:textColor="@color/burgundy"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintEnd_toEndOf="@+id/img_horoscopeMainTextBg"
-        app:layout_constraintHorizontal_bias="0.76"
+        app:layout_constraintHorizontal_bias="0.163"
         app:layout_constraintStart_toStartOf="@+id/img_horoscopeMainTextBg"
         app:layout_constraintTop_toTopOf="@+id/img_horoscopeMainTextBg"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.031" />
 
     <TextView
         android:id="@+id/txt_typeIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
         android:fontFamily="@font/bricolage_grotesque_bold"
-        android:text="Monthly"
+        android:text="Daily"
         android:textColor="@color/burgundy"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/txt_zodiacSign"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="@+id/txt_zodiacSign"
         app:layout_constraintTop_toBottomOf="@+id/txt_zodiacSign" />
 
@@ -231,13 +239,13 @@
         android:id="@+id/txt_tab1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-5dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
         android:rotation="90"
         android:text="Daily"
         android:textColor="@color/white"
-        android:fontFamily="@font/bricolage_grotesque_bold"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_tab1"
-        app:layout_constraintEnd_toEndOf="@+id/img_tab1"
         app:layout_constraintStart_toStartOf="@+id/img_tab1"
         app:layout_constraintTop_toTopOf="@+id/img_tab1" />
 
@@ -245,13 +253,13 @@
         android:id="@+id/txt_tab2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-15dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
         android:rotation="90"
         android:text="Weekly"
         android:textColor="@color/white"
-        android:fontFamily="@font/bricolage_grotesque_bold"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_tab2"
-        app:layout_constraintEnd_toEndOf="@+id/img_tab2"
         app:layout_constraintStart_toStartOf="@+id/img_tab2"
         app:layout_constraintTop_toTopOf="@+id/img_tab2" />
 
@@ -259,13 +267,13 @@
         android:id="@+id/txt_tab3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-20dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
         android:rotation="90"
         android:text="Monthly"
         android:textColor="@color/white"
-        android:fontFamily="@font/bricolage_grotesque_bold"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_tab3"
-        app:layout_constraintEnd_toEndOf="@+id/img_tab3"
         app:layout_constraintStart_toStartOf="@+id/img_tab3"
         app:layout_constraintTop_toTopOf="@+id/img_tab3" />
 
@@ -292,35 +300,44 @@
     <Button
         android:id="@+id/btn_DailyTab"
         android:layout_width="40dp"
-        android:layout_height="130dp"
-        android:text=""
+        android:layout_height="150dp"
         android:backgroundTint="#00FFFFFF"
+        android:onClick="displayDailyHoroscope"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/img_tab1"
         app:layout_constraintEnd_toEndOf="@+id/img_tab1"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/img_tab1"
-        app:layout_constraintTop_toTopOf="@+id/img_tab1" />
+        app:layout_constraintTop_toTopOf="@+id/img_tab1"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btn_WeeklyTab"
         android:layout_width="40dp"
-        android:layout_height="130dp"
-        android:text=""
+        android:layout_height="150dp"
         android:backgroundTint="#00FFFFFF"
+        android:onClick="displayWeeklyHoroscope"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/img_tab2"
         app:layout_constraintEnd_toEndOf="@+id/img_tab2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/img_tab2"
-        app:layout_constraintTop_toTopOf="@+id/img_tab2" />
+        app:layout_constraintTop_toTopOf="@+id/img_tab2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btn_MonthlyTab"
         android:layout_width="40dp"
-        android:layout_height="130dp"
-        android:text=""
+        android:layout_height="150dp"
         android:backgroundTint="#00FFFFFF"
+        android:onClick="displayMonthlyHoroscope"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/img_tab3"
         app:layout_constraintEnd_toEndOf="@+id/img_tab3"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/img_tab3"
-        app:layout_constraintTop_toTopOf="@+id/img_tab3" />
+        app:layout_constraintTop_toTopOf="@+id/img_tab3"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
