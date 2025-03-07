@@ -41,7 +41,8 @@ import java.util.Locale;
 
 public class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
 
-    public static String loggedInUser;
+    public static AppData data;
+
     TextView txt_UserName;
     TextView txt_todaysDate;
     ImageView img_compass;
@@ -55,13 +56,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     TextView txt_location;
     TextView txt_sunrise;
     TextView txt_sunset;
-    double longitude = 0;
-    double latitude = 0;
-    String[] times;
 
-    //user variables
-    String username;
-    String horoscope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +79,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
 
     //called methods
     public void initializeActivity(){
-        userDataConversion();
-
         txt_UserName = findViewById(R.id.txt_UserName);
         txt_todaysDate = findViewById(R.id.txt_date);
         txt_location = findViewById(R.id.txt_location);
@@ -95,7 +88,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         Date d = new Date();
         CharSequence s  = DateFormat.format("MMMM d", d.getTime());
 
-        txt_UserName.setText("Hello, "+username);
+        txt_UserName.setText("Hello, "+data.getUsername());
         txt_todaysDate.setText(s);
     }
 
@@ -112,40 +105,30 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     }
 
     private void apiDataRequestInitialization() {
-        ApiHandler api = new ApiHandler();
-        while(longitude == 0 || latitude == 0){
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+         ApiHandler api = new ApiHandler();
+         while(data.getLatitude() == 0 || data.getLongitude() == 0){
+             try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        }
-        String time = api.getSunriseSunsetTime(latitude, longitude);
-        times = time.split(";");
-        setTime();
+         String time = api.getSunriseSunsetTime(data.getLatitude(), data.getLongitude());
+         data.setTimes(time.split(";"));
+         setTime();
     }
 
     public void setTime(){
         runOnUiThread(() -> {
-            txt_sunrise.setText(times[0]);
-            txt_sunset.setText(times[1]);
+            txt_sunrise.setText(data.getTimes()[0]);
+            txt_sunset.setText(data.getTimes()[1]);
         });
-    }
-
-    private void userDataConversion() {
-        if (loggedInUser != null && loggedInUser.length() > 1){
-            String liu = loggedInUser.substring(1);
-            String[] st = liu.split(";");
-            username = st[0];
-            horoscope = st[1];
-        }
-
     }
 
     public void redirectHoroscope(View view) {
         Intent intent = new Intent(SunActivity.this, HoroscopeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        HoroscopeActivity.loggedInUser = loggedInUser;
+        HoroscopeActivity.data = data;
         startActivity(intent);
         finish();
     }
@@ -225,8 +208,8 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             Geocoder geocoder = new Geocoder(SunActivity.this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             String address = addresses.get(0).getAddressLine(0);
-            longitude = addresses.get(0).getLongitude();
-            latitude = addresses.get(0).getLatitude();
+            data.setLatitude(addresses.get(0).getLatitude());
+            data.setLongitude(addresses.get(0).getLongitude());
             txt_location.setText("Your location is: "+address);
         } catch (Exception e) {
             throw new RuntimeException(e);

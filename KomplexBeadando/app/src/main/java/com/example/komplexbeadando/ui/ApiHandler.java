@@ -237,23 +237,40 @@ class ApiHandler {
 
 
     private String deSerializeDailyHoroscopeResponse(String jsonResponse){
-
         Gson gson = new Gson();
-        DailyHoroscopeDataResponse horoscopeData = gson.fromJson(jsonResponse, DailyHoroscopeDataResponse.class);
-        Log.d(TAG, "Deserialized: "+horoscopeData.isSuccess());
-        Log.d(TAG, "Deserialized: "+horoscopeData.getData().toString());
-        return horoscopeData.getData().getHoroscopeData();
+        Log.d(TAG, "Deserialized: "+jsonResponse);
+        if(!jsonResponse.contains("Error")){
+            Log.d(TAG, "Got proper response for daily horoscope");
+            DailyHoroscopeDataResponse horoscopeData = gson.fromJson(jsonResponse, DailyHoroscopeDataResponse.class);
+            return horoscopeData.getData().getHoroscopeData();
+        }else{
+            Log.d(TAG, "The was an error in getting daily horoscope");
+            return "There was an Errror, check if your wifi or data is on";
+        }
+
     }
 
     private String deSerializeWeeklyHoroscopeResponse(String jsonResponse){
         Gson gson = new Gson();
-        WeeklyHoroscopeDataResponse horoscopeData = gson.fromJson(jsonResponse, WeeklyHoroscopeDataResponse.class);
-        return horoscopeData.getData().getHoroscopeData();
+        if(!jsonResponse.contains("Error")){
+            Log.d(TAG, "Got proper response for weekly horoscope");
+            WeeklyHoroscopeDataResponse horoscopeData = gson.fromJson(jsonResponse, WeeklyHoroscopeDataResponse.class);
+            return horoscopeData.getData().getHoroscopeData();
+        }else{
+            Log.d(TAG, "The was an error in getting weekly horoscope");
+            return "There was an Errror, check if your wifi or data is on";
+        }
     }
 
     private String deSerializeMonthlyHoroscopeResponse(String jsonResponse){
         Gson gson = new Gson();
-        MonthlyHoroscopeDataResponse horoscopeData = gson.fromJson(jsonResponse, MonthlyHoroscopeDataResponse.class);
-        return horoscopeData.getData().getHoroscopeData();
+        if(!jsonResponse.contains("Error")){
+            Log.d(TAG, "Got proper response for monthly horoscope");
+            MonthlyHoroscopeDataResponse horoscopeData = gson.fromJson(jsonResponse, MonthlyHoroscopeDataResponse.class);
+            return horoscopeData.getData().getHoroscopeData();
+        }else{
+            Log.d(TAG, "The was an error in getting monthly horoscope");
+            return "There was an Errror, check if your wifi or data is on";
+        }
     }
 }

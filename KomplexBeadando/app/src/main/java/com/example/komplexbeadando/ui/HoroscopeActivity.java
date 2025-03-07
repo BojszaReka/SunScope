@@ -22,23 +22,19 @@ import java.util.Date;
 
 public class HoroscopeActivity extends AppCompatActivity {
 
-    public static String loggedInUser;
+    public static AppData data;
+
     TextView txt_UserName;
     TextView txt_todaysDate;
     TextView txt_zodiacSign;
     TextView txt_typeIndicator;
     TextView txt_horoscopeDescription;
-    String username;
-    String horoscope;
-
-    String dailydata = "Getting data...";
-    String weeklydata = "Getting data...";
-    String monthlydata = "Getting data...";
 
     ImageView tab1;
     ImageView tab2;
     ImageView tab3;
     ImageView img_zodiacSign;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +52,6 @@ public class HoroscopeActivity extends AppCompatActivity {
     }
 
     public void initializeActivity(){
-        userDataConversion();
 
         txt_UserName = findViewById(R.id.txt_UserName);
         txt_todaysDate = findViewById(R.id.txt_date);
@@ -72,21 +67,21 @@ public class HoroscopeActivity extends AppCompatActivity {
         Date d = new Date();
         CharSequence s  = DateFormat.format("MMMM d", d.getTime());
 
-        setupUI(txt_UserName, "Hello, "+username);
+        setupUI(txt_UserName, "Hello, "+data.getUsername());
         setupUI(txt_todaysDate, s.toString());
-        setupUI(txt_zodiacSign, horoscope);
+        setupUI(txt_zodiacSign, data.getHoroscope());
     }
 
     private void intializeAPIdata() {
         ApiHandler api = new ApiHandler();
-        dailydata = api.getDailyHoroscope(horoscope);
-        weeklydata = api.getWeeklyHoroscope(horoscope);
-        monthlydata = api.getMonthlyHoroscope(horoscope);
+        data.setDailydata(api.getDailyHoroscope(data.getHoroscope()));
+        data.setWeeklydata(api.getWeeklyHoroscope(data.getHoroscope()));
+        data.setMonthlydata(api.getMonthlyHoroscope(data.getHoroscope()));
         displayDailyHoroscope();
     }
 
     private void setZodiacLogo(){
-        switch(horoscope){
+        switch(data.getHoroscope()){
             case "Aries": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac1)); break;
             case "Taurus": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac2)); break;
             case "Gemini": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac3)); break;
@@ -108,17 +103,10 @@ public class HoroscopeActivity extends AppCompatActivity {
         element.requestLayout();
     }
 
-    private void userDataConversion() {
-        String liu = loggedInUser.substring(1);
-        String[] st = liu.split(";");
-        username = st[0];
-        horoscope = st[1];
-    }
-
     public void redirectSundial(View view) {
         Intent intent = new Intent(HoroscopeActivity.this, SunActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SunActivity.loggedInUser = loggedInUser;
+        SunActivity.data = data;
         startActivity(intent);
         finish();
     }
@@ -137,7 +125,7 @@ public class HoroscopeActivity extends AppCompatActivity {
     public void displayDailyHoroscope() {
         runOnUiThread(() -> {
             setupUI(txt_typeIndicator, "Daily");
-            setupUI(txt_horoscopeDescription, dailydata);
+            setupUI(txt_horoscopeDescription, data.getDailydata());
             tab1.getLayoutParams().width = 175;
             tab1.requestLayout();
             tab2.getLayoutParams().width = 150;
@@ -149,7 +137,7 @@ public class HoroscopeActivity extends AppCompatActivity {
 
     public void displayWeeklyHoroscope(View view) {
         setupUI(txt_typeIndicator, "Weekly");
-        setupUI(txt_horoscopeDescription, weeklydata);
+        setupUI(txt_horoscopeDescription, data.getWeeklydata());
         tab2.getLayoutParams().width = 175;
         tab2.requestLayout();
         tab1.getLayoutParams().width = 150;
@@ -160,7 +148,7 @@ public class HoroscopeActivity extends AppCompatActivity {
 
     public void displayMonthlyHoroscope(View view) {
         setupUI(txt_typeIndicator, "Monthly");
-        setupUI(txt_horoscopeDescription, monthlydata);
+        setupUI(txt_horoscopeDescription, data.getMonthlydata());
         tab3.getLayoutParams().width = 175;
         tab3.requestLayout();
         tab1.getLayoutParams().width = 150;

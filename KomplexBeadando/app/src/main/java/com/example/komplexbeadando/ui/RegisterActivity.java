@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                 Log.d(TAG, "Registered: "+result);
                 Intent intent = new Intent(RegisterActivity.this, SunActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SunActivity.loggedInUser = result;
+                SunActivity.data = fillAppData(result);
                 startActivity(intent);
                 finish();
             }else{
@@ -125,6 +125,22 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(mCalendar.getTime());
         btn_pickDate.setText(selectedDate);
 
+    }
+
+    public AppData fillAppData(String loggedinuser){
+        String liu = loggedinuser.substring(1);
+        String[] st = liu.split(";");
+        String username = st[0];
+        String horoscope = st[1];
+        ApiHandler api = new ApiHandler();
+        String dailydata = api.getDailyHoroscope(horoscope);
+        String weeklydata = api.getWeeklyHoroscope(horoscope);
+        String monthlydata = api.getMonthlyHoroscope(horoscope);
+        String[] times = new String[2];
+        times[0] = "";
+        times[1]="";
+        AppData data = new AppData(username, horoscope, 0, 0, times, dailydata, weeklydata, monthlydata);
+        return data;
     }
 
     public void toggleRememeber(View view) {

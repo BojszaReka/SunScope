@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent intent = new Intent(LoginActivity.this, SunActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SunActivity.loggedInUser = userdata;
+        SunActivity.data = fillAppData(userdata);
         startActivity(intent);
         finish();
     }
@@ -108,5 +108,19 @@ public class LoginActivity extends AppCompatActivity {
 
     public void toggleRememeber(View view) {
         remember = !remember;
+    }
+
+    public AppData fillAppData(String loggedinuser){
+        String liu = loggedinuser.substring(1);
+        String[] st = liu.split(";");
+        String username = st[0];
+        String horoscope = st[1];
+        ApiHandler api = new ApiHandler();
+        String dailydata = api.getDailyHoroscope(horoscope);
+        String weeklydata = api.getWeeklyHoroscope(horoscope);
+        String monthlydata = api.getMonthlyHoroscope(horoscope);
+        String[] times = new String[2];
+        AppData data = new AppData(username, horoscope, 0, 0, times, dailydata, weeklydata, monthlydata);
+        return data;
     }
 }
