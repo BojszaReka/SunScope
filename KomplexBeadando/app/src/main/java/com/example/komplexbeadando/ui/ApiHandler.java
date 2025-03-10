@@ -11,8 +11,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.TimeZone;
 
 class ApiHandler {
 
@@ -31,6 +35,20 @@ class ApiHandler {
         String apiresponse = getSunriseSunsetFromAPI(latitude, longitude, date);
         String times = deSerializeSunsetResponse(apiresponse);
         return times;
+    }
+
+    public Date[] getDates(double latitude, double longitude) {
+        String apiresponse = getSunriseSunsetFromAPI(latitude, longitude);
+        Gson gson = new Gson();
+        SunriseSunsetResponse response = gson.fromJson(apiresponse, SunriseSunsetResponse.class);
+        Date[] dates = new Date[2];
+        if(stringToDate(response.getResults().getSunrise()) != null){
+            dates[0]= stringToDate(response.getResults().getSunrise());
+        }
+        if(stringToDate(response.getResults().getSunset()) != null){
+            dates[1] = stringToDate(response.getResults().getSunset());
+        }
+        return dates;
     }
 
     public String getDailyHoroscope(String sign){
@@ -273,4 +291,22 @@ class ApiHandler {
             return "There was an Errror, check if your wifi or data is on";
         }
     }
+
+
+    private Date stringToDate(String dateString){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        try {
+            // Parse the date string into a Date object
+            Date date = sdf.parse(dateString);
+
+            // Print the parsed Date object
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

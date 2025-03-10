@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.komplexbeadando.R;
 
 import java.io.File;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -120,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         String weeklydata = api.getWeeklyHoroscope(horoscope);
         String monthlydata = api.getMonthlyHoroscope(horoscope);
         String[] times = new String[2];
+        Date[] dates = new Date[2];
         AppData data = new AppData(username, horoscope, 0, 0, times, dailydata, weeklydata, monthlydata);
         return data;
     }

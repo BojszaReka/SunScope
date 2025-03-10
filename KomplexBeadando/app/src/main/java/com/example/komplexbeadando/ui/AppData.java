@@ -1,11 +1,14 @@
 package com.example.komplexbeadando.ui;
 
+import java.util.Date;
+
 public class AppData {
     public String username;
     public String horoscope;
     public double longitude = 0;
     public double latitude = 0;
     public String[] times;
+    public Date[] dates;
     public String dailydata = "Getting data...";
     public String weeklydata = "Getting data...";
     public String monthlydata = "Getting data...";
@@ -65,6 +68,14 @@ public class AppData {
 
     public void setTimes(String[] times) {
         this.times = times;
+    }
+
+    public Date[] getDates() {
+        return dates;
+    }
+
+    public void setDates(Date[] dates) {
+        this.dates = dates;
     }
 
     public String getDailydata() {

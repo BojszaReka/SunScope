@@ -4,6 +4,8 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -19,9 +21,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,8 +45,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.komplexbeadando.NotificationReceiver;
 import com.example.komplexbeadando.R;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,6 +86,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         initializeActivity();
         compassInitialization();
         locationInitialization();
+        requestNotificationPermissions();
         new Thread(() -> apiDataRequestInitialization()).start();
     }
 
@@ -114,7 +129,9 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
                 }
             }
          String time = api.getSunriseSunsetTime(data.getLatitude(), data.getLongitude());
+         Date[] dates = api.getDates(data.getLatitude(), data.getLongitude());
          data.setTimes(time.split(";"));
+         data.setDates(dates);
          setTime();
     }
 
@@ -243,7 +260,126 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     }
 
 
+    //notification event handler
     public void notificationButtonClick(View view) {
+        if(data.dates != null && data.dates[0]!=null && data.dates[1] != null){
+            toggleButtons(false);
+            Log.d(TAG, "Notification button clicked");
+            LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popupview = l.inflate(R.layout.popup_notification, null);
+            final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ImageButton btn_close = (ImageButton) popupview.findViewById(R.id.btn_closePopup);
+            ImageButton btn_save = (ImageButton) popupview.findViewById(R.id.btn_save);
+            RadioButton rbtn_sunrise = (RadioButton) popupview.findViewById(R.id.rbtn_sunrise);
+            RadioButton rbtn_sunset = (RadioButton) popupview.findViewById(R.id.rbtn_sunset);
+
+            Spinner dropdown = popupview.findViewById(R.id.spn_dropwon);
+            String[] items = new String[] {"5 mins before", "10 mins before", "15 mins before", "30 mins before", "45 mins before", "60 mins before"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            dropdown.setAdapter(adapter);
+            pop.setWidth(800);
+            dropdown.getLayoutParams().width = 600;
+
+            btn_close.setOnClickListener((OnClickListener) v -> {
+                toggleButtons(true);
+                pop.dismiss();
+            });
+
+            btn_save.setOnClickListener((OnClickListener) v -> {
+                Log.d(TAG, "Save button clicked");
+                int mins = Integer.parseInt(dropdown.getSelectedItem().toString().split(" ")[0]);
+
+                Log.d(TAG, "Selected dropdown item: "+dropdown.getSelectedItem().toString());
+
+
+                if(rbtn_sunrise.isChecked() && !rbtn_sunset.isChecked()){
+                    Log.d(TAG, "Sunrise selected, dropdown item: "+dropdown.getSelectedItem().toString());
+                    setNotification(data.dates[0],mins);
+
+                    sendTestNotification();
+
+                }
+                if(!rbtn_sunrise.isChecked() && rbtn_sunset.isChecked()){
+                    Log.d(TAG, "Sunrise selected, dropdown item: "+dropdown.getSelectedItem().toString());
+                    setNotification(data.dates[1],mins);
+
+                    sendTestNotification();
+                }
+                toggleButtons(true);
+                pop.dismiss();
+            });
+            pop.showAsDropDown(txt_sunrise, 50, -600);
+        }
 
     }
+
+    @SuppressLint("ScheduleExactAlarm")
+    public void setNotification(Date time, int mins){
+        Context context = getApplicationContext();
+        Log.d(TAG, "Setting notification "+mins+" before: "+time.toString());
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Calculate the trigger time
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.MINUTE, -mins);
+
+        // Set the alarm
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+        Toast.makeText(this, "Set notification "+mins+" before: "+time.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    public void toggleButtons(boolean boo){
+        findViewById(R.id.btn_Sundial).setClickable(boo);
+        findViewById(R.id.btn_Horoscope).setClickable(boo);
+        findViewById(R.id.btn_notification).setClickable(boo);
+        findViewById(R.id.btn_gallery).setClickable(boo);
+        findViewById(R.id.btn_camera).setClickable(boo);
+    }
+
+    public void sendTestNotification(){
+        Date currentDate = new Date();
+
+        // Use Calendar to add 30 seconds
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.MINUTE, 1);
+        Date newDate = calendar.getTime();
+
+        setNotification(newDate,0);
+    }
+
+    private void requestNotificationPermissions() {
+        Log.d(TAG, "Check notification permission:");
+        ActivityResultLauncher<String[]> notificationPermissionAccess = registerForActivityResult(new ActivityResultContracts .RequestMultiplePermissions(), result -> {
+                    Boolean scheduleExactAlarmGranted = null;
+                    Boolean useExactAlarmGranted = null;
+                    Boolean postNotficitaionGranted = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        scheduleExactAlarmGranted = result.getOrDefault(Manifest.permission.SCHEDULE_EXACT_ALARM, false);
+                        useExactAlarmGranted = result.getOrDefault(Manifest.permission.USE_EXACT_ALARM,false);
+                        postNotficitaionGranted = result.getOrDefault(Manifest.permission.POST_NOTIFICATIONS,false);
+                    }
+                    if (scheduleExactAlarmGranted != null && scheduleExactAlarmGranted) {
+                        Log.d(TAG, "Schedule exact alarm permission granted");
+                    }
+                    if (useExactAlarmGranted != null && useExactAlarmGranted) {
+                        Log.d(TAG, "Use exact alarm permission granted");
+                    }
+                    if (postNotficitaionGranted != null && postNotficitaionGranted) {
+                         Log.d(TAG, "Post notification permission granted");
+                    }
+                }
+        );
+        notificationPermissionAccess.launch(new String[] {
+                Manifest.permission.SCHEDULE_EXACT_ALARM,
+                Manifest.permission.USE_EXACT_ALARM,
+                Manifest.permission.POST_NOTIFICATIONS
+        });
+    }
+
 }
