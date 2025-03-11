@@ -54,7 +54,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public abstract class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
+public class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
 
     public static AppData data;
     DatabaseServiceManager dbManager;
@@ -170,6 +170,11 @@ public abstract class SunActivity extends AppCompatActivity implements SensorEve
     public void onSensorChanged(SensorEvent event) {
         int degree = Math.round(event.values[1]*360);
         img_compass.setRotation(-degree);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
 
@@ -318,7 +323,7 @@ public abstract class SunActivity extends AppCompatActivity implements SensorEve
 
     public void sendTestNotification(){
         Date currentDate = new Date();
-        
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.MINUTE, 1);
