@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.komplexbeadando.ApiHandler;
 import com.example.komplexbeadando.AppData;
-import com.example.komplexbeadando.FileHandler;
+import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 
 import java.util.Date;
@@ -24,6 +24,8 @@ import java.util.Date;
 public class HoroscopeActivity extends AppCompatActivity {
 
     public static AppData data;
+
+    DatabaseServiceManager dbManager;
 
     TextView txt_UserName;
     TextView txt_todaysDate;
@@ -47,6 +49,9 @@ public class HoroscopeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        dbManager = new DatabaseServiceManager(getApplicationContext());
+
         initializeActivity();
         setZodiacLogo();
         new Thread(() -> intializeAPIdata()).start();
@@ -113,11 +118,13 @@ public class HoroscopeActivity extends AppCompatActivity {
     }
 
     public void settingButtonClicked(View view) {
-        FileHandler.LogOut();
-        Intent intent = new Intent(HoroscopeActivity.this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
-        finish();
+        boolean result = dbManager.updateUserOnLogout(data.getUsername());
+        if(!result){
+            Intent intent = new Intent(HoroscopeActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void displayDailyHoroscope(View view) {

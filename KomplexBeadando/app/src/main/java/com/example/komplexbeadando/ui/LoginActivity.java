@@ -20,13 +20,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.komplexbeadando.ApiHandler;
 import com.example.komplexbeadando.AppData;
-import com.example.komplexbeadando.FileHandler;
+import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
+import com.example.komplexbeadando.User;
 
 import java.io.File;
 import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
+
+    DatabaseServiceManager dbManager;
 
     EditText txf_Usename;
     EditText txf_Password;
@@ -34,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     ImageButton btn_toggle;
     CheckBox chb_remember;
     Boolean remember = false;
-    private File path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,11 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        dbManager = new DatabaseServiceManager(getApplicationContext());
+
         initializeActivity();
+        checkRememberedUser();
     }
 
     private void initializeActivity() {
@@ -54,15 +60,12 @@ public class LoginActivity extends AppCompatActivity {
         txf_Password = findViewById(R.id.txf_Password);
         btn_toggle = findViewById(R.id.btn_viewPsw);
         chb_remember = findViewById(R.id.chb_remember);
+    }
 
-        path = getApplicationContext().getFilesDir();
-
-        if(FileHandler.isRememberedUser(path)){
-            String userdata = FileHandler.rememberedUser();
-            userdata = userdata.substring(1);
-            if(userdata != null && !userdata.isBlank() && !userdata.isEmpty()){
-                LoginProcess(userdata);
-            }
+    private void checkRememberedUser() {
+        User u = dbManager.getRememberedUser();
+        if(u != null){
+            LoginProcess(u);
         }
     }
 
@@ -72,21 +75,22 @@ public class LoginActivity extends AppCompatActivity {
         if( username.equals(null) || psw.equals(null) || username.equals("") || psw.equals("") || username.equals(" ") || psw.equals(" ")){
             Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
         }else{
-            String result = FileHandler.Login(username, psw, path, remember);
-            if(result.charAt(0) == '@'){
-                LoginProcess(result);
+            if(dbManager.authenticateUser(username,psw)){
+                User u = dbManager.getUser(username);
+                u.setRemembered(remember);
+                dbManager.updateUser(u);
+                LoginProcess(u);
             }else{
-                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Rossz bejelentkezési adatok!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public void LoginProcess(String userdata){
-        Log.d(TAG, "Logged in: "+userdata);
-
+    public void LoginProcess(User u){
+        Log.d(TAG, "Logged in: "+u.getUsername());
         Intent intent = new Intent(LoginActivity.this, SunActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SunActivity.data = fillAppData(userdata);
+        SunActivity.data = fillAppData(u);
         startActivity(intent);
         finish();
     }
@@ -114,17 +118,16 @@ public class LoginActivity extends AppCompatActivity {
         remember = !remember;
     }
 
-    public AppData fillAppData(String loggedinuser){
-        String liu = loggedinuser.substring(1);
-        String[] st = liu.split(";");
-        String username = st[0];
-        String horoscope = st[1];
+    public AppData fillAppData(User u){
+        String username = u.getUsername();
+        String horoscope = u.getHoroscope();
         ApiHandler api = new ApiHandler();
         String dailydata = api.getDailyHoroscope(horoscope);
         String weeklydata = api.getWeeklyHoroscope(horoscope);
         String monthlydata = api.getMonthlyHoroscope(horoscope);
         String[] times = new String[2];
-        Date[] dates = new Date[2];
+        times[0] = "";
+        times[1]="";
         AppData data = new AppData(username, horoscope, 0, 0, times, dailydata, weeklydata, monthlydata);
         return data;
     }

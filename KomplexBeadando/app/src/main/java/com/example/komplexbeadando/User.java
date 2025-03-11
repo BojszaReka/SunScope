@@ -1,27 +1,33 @@
 package com.example.komplexbeadando;
 
+import androidx.room.Entity;
+import androidx.room.Fts4;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+
+@Entity(tableName = "users")
 public class User {
+
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String username;
     private String password;
     private String horoscope;
+    private boolean isRemembered;
+
 
     public User(){}
 
-    public User( String username, String password, String date) {
-        this.id = -1;
+    public User(String username, String password, String date) {
+        this.id = 0;
         this.username = username;
         this.password = password;
         this.horoscope = dateToHoroscope(date);
+        isRemembered = false;
     }
 
-    public User(int id, String username, String password, String date) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.horoscope = dateToHoroscope(date);
-    }
-
+    /*
     public User(String read){
         String[] st = read.split(",");
         String[] data = new String[4];
@@ -41,6 +47,7 @@ public class User {
         this.password = data[2];
         this.horoscope = data[3];
     }
+     */
 
     public int getId() {
         return id;
@@ -58,8 +65,27 @@ public class User {
         return horoscope;
     }
 
+    public boolean getIsRemembered(){return isRemembered;}
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setHoroscope(String horoscope) {
         this.horoscope = horoscope;
+    }
+
+    public void setRemembered(boolean remembered) {
+        isRemembered = remembered;
     }
 
     private String dateToHoroscope(String date){

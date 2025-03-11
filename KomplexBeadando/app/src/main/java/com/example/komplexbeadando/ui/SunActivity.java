@@ -46,7 +46,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.komplexbeadando.ApiHandler;
 import com.example.komplexbeadando.AppData;
-import com.example.komplexbeadando.FileHandler;
+import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 
 import java.util.Calendar;
@@ -54,9 +54,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
+public abstract class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
 
     public static AppData data;
+    DatabaseServiceManager dbManager;
 
     TextView txt_UserName;
     TextView txt_todaysDate;
@@ -83,6 +84,8 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        dbManager = new DatabaseServiceManager(getApplicationContext());
 
         initializeActivity();
         compassInitialization();
@@ -152,11 +155,13 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     }
 
     public void settingButtonClicked(View view) {
-        FileHandler.LogOut();
-        Intent intent = new Intent(SunActivity.this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
-        finish();
+        boolean result = dbManager.updateUserOnLogout(data.getUsername());
+        if(!result){
+            Intent intent = new Intent(SunActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            finish();
+        }
     }
 
 
@@ -167,10 +172,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         img_compass.setRotation(-degree);
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     @Override
     protected void onResume() {
@@ -183,7 +184,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         super.onPause();
         sensorManager.unregisterListener(this);
     }
-
 
     //location handling
     private void requestPermissions() {
@@ -235,32 +235,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         new Thread(() -> apiDataRequestInitialization()).start();
     }
 
-    @Override
-    public void onLocationChanged(@NonNull List<Location> locations) {
-        LocationListener.super.onLocationChanged(locations);
-    }
-
-    @Override
-    public void onFlushComplete(int requestCode) {
-        LocationListener.super.onFlushComplete(requestCode);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        LocationListener.super.onStatusChanged(provider, status, extras);
-    }
-
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-        LocationListener.super.onProviderEnabled(provider);
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-        LocationListener.super.onProviderDisabled(provider);
-    }
-
-
     //notification event handler
     public void notificationButtonClick(View view) {
         if(data.dates != null && data.dates[0]!=null && data.dates[1] != null){
@@ -269,10 +243,10 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             View popupview = l.inflate(R.layout.popup_notification, null);
             final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            ImageButton btn_close = (ImageButton) popupview.findViewById(R.id.btn_closePopup);
-            ImageButton btn_save = (ImageButton) popupview.findViewById(R.id.btn_save);
-            RadioButton rbtn_sunrise = (RadioButton) popupview.findViewById(R.id.rbtn_sunrise);
-            RadioButton rbtn_sunset = (RadioButton) popupview.findViewById(R.id.rbtn_sunset);
+            ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
+            ImageButton btn_save = popupview.findViewById(R.id.btn_save);
+            RadioButton rbtn_sunrise = popupview.findViewById(R.id.rbtn_sunrise);
+            RadioButton rbtn_sunset = popupview.findViewById(R.id.rbtn_sunset);
 
             Spinner dropdown = popupview.findViewById(R.id.spn_dropwon);
             String[] items = new String[] {"5 mins before", "10 mins before", "15 mins before", "30 mins before", "45 mins before", "60 mins before"};
@@ -344,8 +318,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
 
     public void sendTestNotification(){
         Date currentDate = new Date();
-
-        // Use Calendar to add 30 seconds
+        
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.MINUTE, 1);

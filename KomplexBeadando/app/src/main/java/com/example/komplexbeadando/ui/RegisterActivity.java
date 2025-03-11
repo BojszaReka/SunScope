@@ -2,15 +2,12 @@ package com.example.komplexbeadando.ui;
 
 
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,12 +24,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.komplexbeadando.ApiHandler;
 import com.example.komplexbeadando.AppData;
-import com.example.komplexbeadando.FileHandler;
+import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
+import com.example.komplexbeadando.User;
 
 import java.io.File;
 
 public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+
+    DatabaseServiceManager dbManager;
 
     EditText txf_Usename;
     EditText txf_Password;
@@ -44,8 +44,6 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     Boolean remember = false;
 
-    private File path;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +54,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        dbManager = new DatabaseServiceManager(getApplicationContext());
+
         initializeActivity();
     }
 
@@ -66,8 +67,6 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         btn_pickDate = findViewById(R.id.btn_pickDate);
         chb_remember = findViewById(R.id.chb_remember);
 
-        path = getApplicationContext().getFilesDir();
-
         selectedDate = null;
     }
 
@@ -77,19 +76,26 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         if( username.equals(null) || psw.equals(null) || username.equals("") || psw.equals("") || username.equals(" ") || psw.equals(" ") || selectedDate.equals(null)){
             Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
         }else{
-            String result = FileHandler.Register(username, psw, selectedDate, path, remember);
-            if(result.charAt(0) == '@'){
-                Log.d(TAG, "Registered: "+result);
+            if(dbManager.checkUsernameFree(username)){
+                AppData data = registerProcess(username, psw);
                 Intent intent = new Intent(RegisterActivity.this, SunActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                SunActivity.data = fillAppData(result);
+                SunActivity.data = data;
                 startActivity(intent);
                 finish();
             }else{
-                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "A felhasználónév foglalt!", Toast.LENGTH_LONG).show();
             }
         }
+    }
 
+    private AppData registerProcess(String username, String psw) {
+        dbManager.addUser(new User(username, psw, selectedDate));
+        User u = dbManager.getUser(username);
+        u.setRemembered(remember);
+        dbManager.updateUser(u);
+        AppData data = fillAppData(u);
+        return data;
     }
 
     public void Login(View view) {
@@ -128,11 +134,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     }
 
-    public AppData fillAppData(String loggedinuser){
-        String liu = loggedinuser.substring(1);
-        String[] st = liu.split(";");
-        String username = st[0];
-        String horoscope = st[1];
+    public AppData fillAppData(User u){
+        String username = u.getUsername();
+        String horoscope = u.getHoroscope();
         ApiHandler api = new ApiHandler();
         String dailydata = api.getDailyHoroscope(horoscope);
         String weeklydata = api.getWeeklyHoroscope(horoscope);

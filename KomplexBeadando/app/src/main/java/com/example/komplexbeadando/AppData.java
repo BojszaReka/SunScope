@@ -15,10 +15,24 @@ public class AppData {
 
     // Empty constructor
     public AppData() {}
+    public AppData(User user){
+        username = user.getUsername();
+        horoscope = user.getHoroscope();
+    }
+
+    public AppData(User user, double longitude, double latitude, String[] times, String dailydata, String weeklydata, String monthlydata){
+        username = user.getUsername();
+        horoscope = user.getHoroscope();
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.times = times;
+        this.dailydata = dailydata;
+        this.weeklydata = weeklydata;
+        this.monthlydata = monthlydata;
+    }
 
     // Constructor with parameters
-    public AppData(String username, String horoscope, double longitude, double latitude, String[] times,
-                   String dailydata, String weeklydata, String monthlydata) {
+    public AppData(String username, String horoscope, double longitude, double latitude, String[] times, String dailydata, String weeklydata, String monthlydata) {
         this.username = username;
         this.horoscope = horoscope;
         this.longitude = longitude;
