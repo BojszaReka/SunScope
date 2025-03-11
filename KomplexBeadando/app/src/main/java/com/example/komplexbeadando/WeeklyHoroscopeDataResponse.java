@@ -1,8 +1,6 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
-import androidx.annotation.NonNull;
-
-public class DailyHoroscopeDataResponse {
+public class WeeklyHoroscopeDataResponse {
 
         private Data data;
         private int status;
@@ -35,15 +33,15 @@ public class DailyHoroscopeDataResponse {
 
 
     public class Data {
-        private String date;
+        private String week;
         private String horoscope_data;
 
         public String getDate() {
-            return date;
+            return week;
         }
 
-        public void setDate(String date) {
-            this.date = date;
+        public void setDate(String week) {
+            this.week = week;
         }
 
         public String getHoroscopeData() {
@@ -54,10 +52,5 @@ public class DailyHoroscopeDataResponse {
             this.horoscope_data = horoscopeData;
         }
 
-        @NonNull
-        @Override
-        public String toString() {
-            return date+" "+horoscope_data;
-        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FileHandler {
 

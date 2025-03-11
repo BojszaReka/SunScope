@@ -1,4 +1,4 @@
-package com.example.komplexbeadando;
+package com.example.komplexbeadando.ui;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.komplexbeadando.R;
 
 public class NotificationReceiver extends BroadcastReceiver {
 

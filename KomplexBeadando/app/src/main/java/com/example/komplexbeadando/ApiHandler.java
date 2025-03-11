@@ -1,4 +1,4 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -18,8 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
-class ApiHandler {
-
+public class ApiHandler {
 
     public ApiHandler() {
 
@@ -78,23 +77,17 @@ class ApiHandler {
         return  horoscopedata;
     }
 
-
-
     private static String getSunriseSunsetFromAPI(double lat, double lng, String date) {
         Log.d(TAG, "Starting API call: get sunset and sunrise data");
         try {
-            String apiUrl = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng +
-                    (date != null ? "&date=" + date : "")+"&formatted=0";
-
+            String apiUrl = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng + (date != null ? "&date=" + date : "")+"&formatted=0";
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
-
             if (conn.getResponseCode() != 200) {
                 throw new RuntimeException("HTTP GET Request Failed with Error Code : " + conn.getResponseCode());
             }
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String output;
@@ -106,7 +99,6 @@ class ApiHandler {
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
-
         }
     }
 
@@ -114,17 +106,14 @@ class ApiHandler {
         Log.d(TAG, "Starting API call: get sunset and sunrise data");
         try {
             String apiUrl = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng+"&formatted=0";
-
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
-
             if (conn.getResponseCode() != 200) {
                 Log.d(TAG, "HTTP GET Request Failed with Error Code : " + conn.getResponseCode());
                 throw new RuntimeException("HTTP GET Request Failed with Error Code : " + conn.getResponseCode());
             }
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String output;
@@ -136,48 +125,21 @@ class ApiHandler {
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
-
         }
-    }
-
-    private String deSerializeSunsetResponse(String jsonResponse){
-        Gson gson = new Gson();
-        SunriseSunsetResponse response = gson.fromJson(jsonResponse, SunriseSunsetResponse.class);
-
-        String sunrise = response.getResults().getSunrise();
-        String sunset = response.getResults().getSunset();
-        sunrise = formatTime(sunrise);
-        sunset = formatTime(sunset);
-        return sunrise+";"+sunset;
-    }
-
-    private static String formatTime(String inputDate) {
-        OffsetDateTime dateTime = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-            dateTime = OffsetDateTime.parse(inputDate, inputFormatter);
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            String formattedTime = dateTime.format(outputFormatter);
-            return formattedTime;
-        }
-        return inputDate;
     }
 
     private static String getDailyHoroscopeAPI(String sign) {
         Log.d(TAG, "Starting API call: get daily horoscope data for sign: "+sign);
         try {
             String apiUrl = "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign="+sign+"&day=TODAY";
-
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
-
             if (conn.getResponseCode() != 200) {
                 Log.d(TAG, "HTTP GET Request Failed with Error Code : " + conn.getResponseCode());
                 return null;
             }
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String output;
@@ -189,7 +151,6 @@ class ApiHandler {
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
-
         }
     }
 
@@ -197,17 +158,14 @@ class ApiHandler {
         Log.d(TAG, "Starting API call: get weekly data for sign: "+sign);
         try {
             String apiUrl = "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/weekly?sign="+sign;
-
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
-
             if (conn.getResponseCode() != 200) {
                 Log.d(TAG, "HTTP GET Request Failed with Error Code : " + conn.getResponseCode());
                 return null;
             }
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String output;
@@ -219,7 +177,6 @@ class ApiHandler {
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
-
         }
     }
 
@@ -227,17 +184,14 @@ class ApiHandler {
         Log.d(TAG, "Starting API call: get monthly horoscope data for sign: "+sign);
         try {
             String apiUrl = "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/monthly?sign="+sign;
-
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
-
             if (conn.getResponseCode() != 200) {
                 Log.d(TAG, "HTTP GET Request Failed with Error Code : " + conn.getResponseCode());
                 return null;
             }
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String output;
@@ -249,7 +203,6 @@ class ApiHandler {
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
-
         }
     }
 
@@ -292,16 +245,33 @@ class ApiHandler {
         }
     }
 
+    private String deSerializeSunsetResponse(String jsonResponse){
+        Gson gson = new Gson();
+        SunriseSunsetResponse response = gson.fromJson(jsonResponse, SunriseSunsetResponse.class);
+        String sunrise = response.getResults().getSunrise();
+        String sunset = response.getResults().getSunset();
+        sunrise = formatTime(sunrise);
+        sunset = formatTime(sunset);
+        return sunrise+";"+sunset;
+    }
+
+    private static String formatTime(String inputDate) {
+        OffsetDateTime dateTime = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            dateTime = OffsetDateTime.parse(inputDate, inputFormatter);
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            String formattedTime = dateTime.format(outputFormatter);
+            return formattedTime;
+        }
+        return inputDate;
+    }
 
     private Date stringToDate(String dateString){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
         try {
-            // Parse the date string into a Date object
             Date date = sdf.parse(dateString);
-
-            // Print the parsed Date object
             return date;
         } catch (ParseException e) {
             e.printStackTrace();

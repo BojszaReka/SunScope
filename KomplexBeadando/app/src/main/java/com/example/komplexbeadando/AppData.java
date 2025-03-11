@@ -1,4 +1,4 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
 import java.util.Date;
 

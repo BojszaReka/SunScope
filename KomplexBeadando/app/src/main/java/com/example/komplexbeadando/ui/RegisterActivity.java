@@ -3,10 +3,8 @@ package com.example.komplexbeadando.ui;
 
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
@@ -27,6 +25,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.komplexbeadando.ApiHandler;
+import com.example.komplexbeadando.AppData;
+import com.example.komplexbeadando.FileHandler;
 import com.example.komplexbeadando.R;
 
 import java.io.File;

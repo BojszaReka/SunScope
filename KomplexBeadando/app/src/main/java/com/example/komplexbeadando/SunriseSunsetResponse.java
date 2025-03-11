@@ -1,8 +1,6 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
-
-
-class SunriseSunsetResponse {
+public class SunriseSunsetResponse {
     private Results results;
     private String status;
     private String tzid;

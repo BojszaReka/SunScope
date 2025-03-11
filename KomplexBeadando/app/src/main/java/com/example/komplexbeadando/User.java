@@ -1,6 +1,6 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
-class User {
+public class User {
     private int id;
     private String username;
     private String password;
@@ -41,8 +41,6 @@ class User {
         this.password = data[2];
         this.horoscope = data[3];
     }
-
-
 
     public int getId() {
         return id;

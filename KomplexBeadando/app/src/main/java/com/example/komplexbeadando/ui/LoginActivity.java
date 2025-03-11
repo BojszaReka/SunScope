@@ -18,6 +18,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.komplexbeadando.ApiHandler;
+import com.example.komplexbeadando.AppData;
+import com.example.komplexbeadando.FileHandler;
 import com.example.komplexbeadando.R;
 
 import java.io.File;

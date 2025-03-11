@@ -1,4 +1,4 @@
-package com.example.komplexbeadando.ui;
+package com.example.komplexbeadando;
 
 public class MonthlyHoroscopeDataResponse {
     private Data data;

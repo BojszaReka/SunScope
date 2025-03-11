@@ -1,7 +1,6 @@
 package com.example.komplexbeadando.ui;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -15,9 +14,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.komplexbeadando.ApiHandler;
+import com.example.komplexbeadando.AppData;
+import com.example.komplexbeadando.FileHandler;
 import com.example.komplexbeadando.R;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class HoroscopeActivity extends AppCompatActivity {
