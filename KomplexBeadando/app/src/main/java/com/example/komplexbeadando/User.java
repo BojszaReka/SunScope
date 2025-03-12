@@ -27,28 +27,6 @@ public class User {
         isRemembered = false;
     }
 
-    /*
-    public User(String read){
-        String[] st = read.split(",");
-        String[] data = new String[4];
-        int index = 0;
-        for (String a : st) {
-            String[] st2 = a.split("=");
-            if(st2.length == 2){
-                data[index] = st2[1];
-                index++;
-            }
-        }
-        if(data[0].charAt(0) == ' '){
-            data[0] = data[0].substring(1);
-        }
-        this.id = Integer.parseInt(data[0]);
-        this.username = data[1];
-        this.password = data[2];
-        this.horoscope = data[3];
-    }
-     */
-
     public int getId() {
         return id;
     }

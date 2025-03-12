@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -36,6 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -47,6 +50,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.komplexbeadando.ApiHandler;
 import com.example.komplexbeadando.AppData;
 import com.example.komplexbeadando.DatabaseServiceManager;
+import com.example.komplexbeadando.GalleryActivity;
 import com.example.komplexbeadando.R;
 
 import java.util.Calendar;
@@ -366,4 +370,20 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivity(intent);
     }
+
+    public void openGallery(View view) {
+        Intent intent = new Intent(SunActivity.this, GalleryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+    }
+
+    ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                }
+            }
+    );
 }

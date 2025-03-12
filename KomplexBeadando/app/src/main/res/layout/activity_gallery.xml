@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GalleryActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="Back"
+        android:textColor="@color/burgundy"
+        android:onClick="back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/bricolage_grotesque_semibold"
+        android:text="Photo Gallery"
+        android:textColor="@color/burgundy"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="409dp"
+        android:layout_height="671dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button">
+
+
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+                <TableRow
+                    android:id="@+id/row1">
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:layout_margin="2dp"
+                        tools:layout_editor_absoluteX="272dp"
+                        tools:srcCompat="@tools:sample/avatars">
+                    </ImageView>
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:layout_margin="2dp"
+                        tools:layout_editor_absoluteX="272dp"
+                        tools:srcCompat="@tools:sample/avatars" />
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:layout_margin="2dp"
+                        tools:layout_editor_absoluteX="272dp"
+                        tools:srcCompat="@tools:sample/avatars" />
+                </TableRow>
+
+            </TableLayout>
+
+
+
+
+
+
+    </ScrollView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
