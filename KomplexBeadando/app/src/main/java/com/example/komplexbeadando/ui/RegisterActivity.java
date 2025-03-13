@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(mCalendar.getTime());
         btn_pickDate.setText(selectedDate);
-        horoscope = dateToHoroscope(month, dayOfMonth);
+        horoscope = dateToHoroscope(month+1, dayOfMonth);
     }
 
     public AppData fillAppData(User u){

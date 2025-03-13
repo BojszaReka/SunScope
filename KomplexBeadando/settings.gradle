@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "KomplexBeadando"
+rootProject.name = "SunScope"
 include ':app'

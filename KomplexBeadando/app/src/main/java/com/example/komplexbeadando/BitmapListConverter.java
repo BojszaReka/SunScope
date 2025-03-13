@@ -45,7 +45,7 @@ public class BitmapListConverter {
             return bitmaps;
         } catch (Exception e) {
             e.printStackTrace();
-            return Collections.emptyList(); 
+            return Collections.emptyList();
         }
     }
 
