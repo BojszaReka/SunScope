@@ -48,6 +48,20 @@ public class ApiHandler {
         return dates;
     }
 
+    public Date[] getDates(double latitude, double longitude, String date) {
+        String apiresponse = getSunriseSunsetFromAPI(latitude, longitude, date);
+        Gson gson = new Gson();
+        SunriseSunsetResponse response = gson.fromJson(apiresponse, SunriseSunsetResponse.class);
+        Date[] dates = new Date[2];
+        if(stringToDate(response.getResults().getSunrise()) != null){
+            dates[0]= stringToDate(response.getResults().getSunrise());
+        }
+        if(stringToDate(response.getResults().getSunset()) != null){
+            dates[1] = stringToDate(response.getResults().getSunset());
+        }
+        return dates;
+    }
+
     public String getDailyHoroscope(String sign){
         String apiresponse = getDailyHoroscopeAPI(sign);
         String horoscopedata = null;
@@ -77,6 +91,7 @@ public class ApiHandler {
 
     private static String getSunriseSunsetFromAPI(double lat, double lng, String date) {
         Log.d(TAG, "Starting API call: get sunset and sunrise data");
+        Log.d(TAG, "With date?: "+(date != null ? "&date=" + date : ""));
         String apiUrl = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng + (date != null ? "&date=" + date : "")+"&formatted=0";
         try {
             URL url = new URL(apiUrl);
@@ -245,17 +260,22 @@ public class ApiHandler {
 
     private String deSerializeSunsetResponse(String jsonResponse){
         Gson gson = new Gson();
-        SunriseSunsetResponse response = gson.fromJson(jsonResponse, SunriseSunsetResponse.class);
-        String sunrise = response.getResults().getSunrise();
-        String sunset = response.getResults().getSunset();
-        sunrise = formatTime(sunrise);
-        sunset = formatTime(sunset);
-        return sunrise+";"+sunset;
+        if(!jsonResponse.contains("Error")){
+            SunriseSunsetResponse response = gson.fromJson(jsonResponse, SunriseSunsetResponse.class);
+            String sunrise = response.getResults().getSunrise();
+            String sunset = response.getResults().getSunset();
+            sunrise = formatTime(sunrise);
+            sunset = formatTime(sunset);
+            return sunrise+";"+sunset;
+        }else{
+            return "There was an error while getting the response";
+        }
+
     }
 
     private static String formatTime(String inputDate) {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        OffsetDateTime dateTime = OffsetDateTime.parse(inputDate, inputFormatter);
+        OffsetDateTime dateTime = OffsetDateTime.parse(inputDate, inputFormatter).plusHours(1);
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm");
         return dateTime.format(outputFormatter);
     }

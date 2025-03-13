@@ -277,5 +277,50 @@
         app:layout_constraintTop_toBottomOf="@+id/img_arch"
         app:srcCompat="@drawable/cameraicon" />
 
+    <TextView
+        android:id="@+id/txt_timeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="Sunrise and sunset at:"
+        android:textColor="@color/fadedburgundy"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_arch"
+        app:layout_constraintEnd_toEndOf="@+id/img_arch"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/img_arch"
+        app:layout_constraintTop_toTopOf="@+id/img_arch"
+        app:layout_constraintVertical_bias="0.788" />
+
+    <TextView
+        android:id="@+id/txt_dateOfSuntime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="date"
+        android:textColor="@color/fadedburgundy"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/img_arch"
+        app:layout_constraintStart_toStartOf="@+id/img_arch"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/txt_timeTitle" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="@color/fadedburgundy"
+        android:onClick="newDate"
+        android:text="Pick a different day"
+        android:textSize="12dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_gallery"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toEndOf="@+id/btn_notification"
+        app:layout_constraintTop_toBottomOf="@+id/txt_location"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

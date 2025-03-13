@@ -6,6 +6,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -48,11 +49,14 @@ import com.example.komplexbeadando.AppData;
 import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
+public class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener, DatePickerDialog.OnDateSetListener {
 
     public static AppData data;
     DatabaseServiceManager dbManager;
@@ -71,7 +75,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     TextView txt_sunrise;
     TextView txt_sunset;
 
-
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,8 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
 
     //called methods
     public void initializeActivity(){
+        TextView txt_dateOfSuntime = findViewById(R.id.txt_dateOfSuntime);
+
         txt_UserName = findViewById(R.id.txt_UserName);
         txt_todaysDate = findViewById(R.id.txt_date);
         txt_location = findViewById(R.id.txt_location);
@@ -108,6 +114,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
 
         txt_UserName.setText(String.format("Hello, %s", data.getUsername()));
         txt_todaysDate.setText(s);
+        txt_dateOfSuntime.setText(s);
 
         Log.d(TAG, "Photo db: "+data.getPhotos().size());
     }
@@ -310,10 +317,13 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         calendar.setTime(time);
         calendar.add(Calendar.MINUTE, -mins);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+        String formattedDate = sdf.format(time);
+
         if (alarmManager != null) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
-        Toast.makeText(this, "Set notification "+mins+" before: "+time, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Set notification "+mins+" minutes before: "+formattedDate, Toast.LENGTH_LONG).show();
     }
 
     public void toggleButtons(boolean boo){
@@ -364,7 +374,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         imgCaptureResultLauncher.launch(intent);
-        //startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
 
     ActivityResultLauncher<Intent> imgCaptureResultLauncher = registerForActivityResult(
@@ -377,8 +386,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
                     }
                 }
     });
-
-
 
     public void handleData(Intent intentData){
         Bundle bundle = intentData.getExtras();
@@ -401,6 +408,40 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         startActivity(intent);
     }
 
+    public void newDate(View view) {
+        com.example.komplexbeadando.ui.DatePicker mDatePickerDialogFragment;
+        mDatePickerDialogFragment = new com.example.komplexbeadando.ui.DatePicker();
+        mDatePickerDialogFragment.show(getSupportFragmentManager(), "DATE PICK");
+    }
+
+    @Override
+    public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
+        android.icu.util.Calendar mCalendar = android.icu.util.Calendar.getInstance();
+        mCalendar.set(android.icu.util.Calendar.YEAR, year);
+        mCalendar.set(android.icu.util.Calendar.MONTH, month);
+        mCalendar.set(android.icu.util.Calendar.DAY_OF_MONTH, dayOfMonth);
+        String selectedDate = android.icu.text.DateFormat.getDateInstance(android.icu.text.DateFormat.FULL).format(mCalendar.getTime());
+        TextView txt_dateOfSuntime = findViewById(R.id.txt_dateOfSuntime);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        date = sdf.format(mCalendar.getTime());
+        txt_dateOfSuntime.setText(date);
+
+        new Thread(this::getDataFromApi).start();
+    }
+
+    public void getDataFromApi(){
+        ApiHandler apiHandler = new ApiHandler();
+        String response = apiHandler.getSunriseSunsetTime(data.getLatitude(), data.getLongitude(), date);
+        Date[] dates = apiHandler.getDates(data.getLatitude(), data.getLongitude(), date);
+        if(response.contains("Error")){
+            Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
+        }else{
+            data.setTimes(response.split(";"));
+            data.setDates(dates);
+            setTime();
+        }
+    }
 }
 
 

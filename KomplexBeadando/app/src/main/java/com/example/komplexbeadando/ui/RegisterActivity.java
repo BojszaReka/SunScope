@@ -28,6 +28,11 @@ import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 import com.example.komplexbeadando.User;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     DatabaseServiceManager dbManager;
@@ -134,15 +139,28 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     }
 
     public AppData fillAppData(User u){
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
         String horoscope = u.getHoroscope();
         ApiHandler api = new ApiHandler();
-        String dailydata = api.getDailyHoroscope(horoscope);
-        String weeklydata = api.getWeeklyHoroscope(horoscope);
-        String monthlydata = api.getMonthlyHoroscope(horoscope);
-        String[] times = new String[2];
-        times[0] = "";
-        times[1]="";
-        return new AppData(u, 0, 0, times, dailydata, weeklydata, monthlydata);
+
+        Future<String> dailyFuture = executor.submit(() -> api.getDailyHoroscope(horoscope));
+        Future<String> weeklyFuture = executor.submit(() -> api.getWeeklyHoroscope(horoscope));
+        Future<String> monthlyFuture = executor.submit(() -> api.getMonthlyHoroscope(horoscope));
+
+        String dailydata = "";
+        String weeklydata = "";
+        String monthlydata = "";
+
+        try {
+            dailydata = dailyFuture.get();  // Waits for the API call to complete
+            weeklydata = weeklyFuture.get();
+            monthlydata = monthlyFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return new AppData(u, 0, 0, new String[]{"", ""}, dailydata, weeklydata, monthlydata);
     }
 
     private String dateToHoroscope(int month, int day){
