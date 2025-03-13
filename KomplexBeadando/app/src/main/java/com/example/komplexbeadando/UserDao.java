@@ -21,17 +21,17 @@ public interface UserDao {
     void delete(User user);
 
     @Update
-    public void updateUsers(List<User> users);
+    void updateUsers(List<User> users);
 
     @Update
-    public void updateUser(User user);
+    void updateUser(User user);
 
     @Query("SELECT * FROM users")
-    public List<User> getAll();
+    List<User> getAll();
 
     @Query("SELECT * FROM users WHERE id == :id LIMIT 1")
-    public User getUser(int id);
+    User getUser(int id);
 
     @Query("SELECT * FROM users WHERE username == :username LIMIT 1")
-    public User getUser(String username);
+    User getUser(String username);
 }

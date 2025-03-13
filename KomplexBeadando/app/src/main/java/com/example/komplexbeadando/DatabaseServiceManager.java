@@ -1,27 +1,13 @@
 package com.example.komplexbeadando;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.Toast;
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class DatabaseServiceManager {
     Database db;
@@ -42,7 +28,7 @@ public class DatabaseServiceManager {
                 super.onOpen(db);
             }
         };
-        db = Room.databaseBuilder(_context, Database.class, "SunScopeDB").addCallback(myCallback).allowMainThreadQueries().build();
+        db = Room.databaseBuilder(_context, Database.class, "SunScopeDB").addCallback(myCallback).fallbackToDestructiveMigration().allowMainThreadQueries().build();
         userDao = db.userDao();
     }
 
@@ -73,11 +59,7 @@ public class DatabaseServiceManager {
 
     public boolean authenticateUser(String username, String password){
         User u = getUser(username);
-        if(u.getPassword().equals(password)){
-            return true;
-        }else{
-            return false;
-        }
+        return u != null && u.getPassword().equals(password);
     }
 
     public boolean checkUsernameFree(String username){
@@ -110,6 +92,16 @@ public class DatabaseServiceManager {
         return u.getIsRemembered();
     }
 
+    public void addPhoto(String username, Bitmap photo){
+        User u = userDao.getUser(username);
+        List<Bitmap> p = u.getPhotos();
+        p.add(photo);
+        u.setPhotos(p);
+        userDao.updateUser(u);
+    }
 
+    public void deleteUser(String username){
+        userDao.delete(userDao.getUser(username));
+    }
 
 }

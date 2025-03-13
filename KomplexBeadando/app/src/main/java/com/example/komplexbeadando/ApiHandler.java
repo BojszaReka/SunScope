@@ -2,7 +2,6 @@ package com.example.komplexbeadando;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class ApiHandler {
@@ -26,14 +26,12 @@ public class ApiHandler {
 
     public String getSunriseSunsetTime(double latitude, double longitude){
         String apiresponse = getSunriseSunsetFromAPI(latitude, longitude);
-        String times = deSerializeSunsetResponse(apiresponse);
-        return times;
+        return deSerializeSunsetResponse(apiresponse);
     }
 
     public String getSunriseSunsetTime(double latitude, double longitude, String date){
         String apiresponse = getSunriseSunsetFromAPI(latitude, longitude, date);
-        String times = deSerializeSunsetResponse(apiresponse);
-        return times;
+        return deSerializeSunsetResponse(apiresponse);
     }
 
     public Date[] getDates(double latitude, double longitude) {
@@ -79,8 +77,8 @@ public class ApiHandler {
 
     private static String getSunriseSunsetFromAPI(double lat, double lng, String date) {
         Log.d(TAG, "Starting API call: get sunset and sunrise data");
+        String apiUrl = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng + (date != null ? "&date=" + date : "")+"&formatted=0";
         try {
-            String apiUrl = "https://api.sunrise-sunset.org/json?lat=" + lat + "&lng=" + lng + (date != null ? "&date=" + date : "")+"&formatted=0";
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -95,7 +93,7 @@ public class ApiHandler {
                 response.append(output);
             }
             conn.disconnect();
-            Log.d(TAG, "sunset and sunrise api response: "+response.toString());
+            Log.d(TAG, "sunset and sunrise api response: "+response);
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -121,7 +119,7 @@ public class ApiHandler {
                 response.append(output);
             }
             conn.disconnect();
-            Log.d(TAG, "sunset and sunrise api response: "+response.toString());
+            Log.d(TAG, "sunset and sunrise api response: "+response);
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -147,7 +145,7 @@ public class ApiHandler {
                 response.append(output);
             }
             conn.disconnect();
-            Log.d(TAG, "Daily api response: "+response.toString());
+            Log.d(TAG, "Daily api response: "+response);
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -173,7 +171,7 @@ public class ApiHandler {
                 response.append(output);
             }
             conn.disconnect();
-            Log.d(TAG, "Weekly api response: "+response.toString());
+            Log.d(TAG, "Weekly api response: "+response);
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -199,7 +197,7 @@ public class ApiHandler {
                 response.append(output);
             }
             conn.disconnect();
-            Log.d(TAG, "Monthly api response: "+response.toString());
+            Log.d(TAG, "Monthly api response: "+response);
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -256,23 +254,17 @@ public class ApiHandler {
     }
 
     private static String formatTime(String inputDate) {
-        OffsetDateTime dateTime = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-            dateTime = OffsetDateTime.parse(inputDate, inputFormatter);
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            String formattedTime = dateTime.format(outputFormatter);
-            return formattedTime;
-        }
-        return inputDate;
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        OffsetDateTime dateTime = OffsetDateTime.parse(inputDate, inputFormatter);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        return dateTime.format(outputFormatter);
     }
 
     private Date stringToDate(String dateString){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
-            Date date = sdf.parse(dateString);
-            return date;
+            return sdf.parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
             return null;

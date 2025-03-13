@@ -1,5 +1,6 @@
 package com.example.komplexbeadando.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -54,7 +56,7 @@ public class HoroscopeActivity extends AppCompatActivity {
 
         initializeActivity();
         setZodiacLogo();
-        new Thread(() -> intializeAPIdata()).start();
+        new Thread(this::intializeAPIdata).start();
     }
 
     public void initializeActivity(){
@@ -86,20 +88,21 @@ public class HoroscopeActivity extends AppCompatActivity {
         displayDailyHoroscope();
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setZodiacLogo(){
         switch(data.getHoroscope()){
-            case "Aries": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac1)); break;
-            case "Taurus": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac2)); break;
-            case "Gemini": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac3)); break;
-            case "Cancer": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac4)); break;
-            case "Leo": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac5)); break;
-            case "Virgo": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac6)); break;
-            case "Libra": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac7)); break;
-            case "Scorpio": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac8)); break;
-            case "Saggitarius": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac9)); break;
-            case "Capricorn": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac10)); break;
-            case "Aquarius": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac11)); break;
-            case "Pisces": img_zodiacSign.setImageDrawable(getResources().getDrawable(R.drawable.zodiac12)); break;
+            case "Aries": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac1, null)); break;
+            case "Taurus": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac2, null)); break;
+            case "Gemini": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac3, null)); break;
+            case "Cancer": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac4, null)); break;
+            case "Leo": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac5, null)); break;
+            case "Virgo": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac6, null)); break;
+            case "Libra": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac7, null)); break;
+            case "Scorpio": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac8, null)); break;
+            case "Sagittarius": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac9, null)); break;
+            case "Capricorn": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac10, null)); break;
+            case "Aquarius": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac11, null)); break;
+            case "Pisces": img_zodiacSign.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.zodiac12, null)); break;
         }
 
     }

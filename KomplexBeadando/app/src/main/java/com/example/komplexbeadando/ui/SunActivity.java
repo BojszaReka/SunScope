@@ -9,23 +9,21 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -37,8 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -50,12 +46,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.komplexbeadando.ApiHandler;
 import com.example.komplexbeadando.AppData;
 import com.example.komplexbeadando.DatabaseServiceManager;
-import com.example.komplexbeadando.GalleryActivity;
 import com.example.komplexbeadando.R;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class SunActivity extends AppCompatActivity implements SensorEventListener, LocationListener {
@@ -78,6 +72,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     TextView txt_sunset;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +90,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         compassInitialization();
         locationInitialization();
         requestNotificationPermissions();
-        new Thread(() -> apiDataRequestInitialization()).start();
+        new Thread(this::apiDataRequestInitialization).start();
     }
 
 
@@ -111,8 +106,10 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         Date d = new Date();
         CharSequence s  = DateFormat.format("MMMM d", d.getTime());
 
-        txt_UserName.setText("Hello, "+data.getUsername());
+        txt_UserName.setText(String.format("Hello, %s", data.getUsername()));
         txt_todaysDate.setText(s);
+
+        Log.d(TAG, "Photo db: "+data.getPhotos().size());
     }
 
     private void compassInitialization() {
@@ -135,7 +132,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-            }
+         }
          String time = api.getSunriseSunsetTime(data.getLatitude(), data.getLongitude());
          Date[] dates = api.getDates(data.getLatitude(), data.getLongitude());
          data.setTimes(time.split(";"));
@@ -198,18 +195,13 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     private void requestPermissions() {
         Log.d(TAG, "Check location access");
         ActivityResultLauncher<String[]> locationPermissionRequest = registerForActivityResult(new ActivityResultContracts .RequestMultiplePermissions(), result -> {
-            Boolean fineLocationGranted = null;
-            Boolean coarseLocationGranted = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
-                coarseLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION,false);
-            }
+            Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
+            Boolean coarseLocationGranted  = result.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION,false);
+
             if (fineLocationGranted != null && fineLocationGranted) {
                 Log.d(TAG, "Fine location access granted");
             } else if (coarseLocationGranted != null && coarseLocationGranted) {
                 Log.d(TAG, "Coarses location access granted");
-            } else {
-                // No location access granted.
             }
         }
     );
@@ -223,7 +215,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     private void getLocation(){
         try {
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 5000, 5, SunActivity.this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, SunActivity.this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -233,15 +225,24 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     public void onLocationChanged(@NonNull Location location) {
         try {
             Geocoder geocoder = new Geocoder(SunActivity.this, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            String address = addresses.get(0).getAddressLine(0);
-            data.setLatitude(addresses.get(0).getLatitude());
-            data.setLongitude(addresses.get(0).getLongitude());
-            txt_location.setText("Your location is: "+address);
+
+            Geocoder.GeocodeListener listener = addresses -> {
+                if (addresses != null) {
+                    String address = addresses.get(0).getAddressLine(0);
+                    data.setLatitude(addresses.get(0).getLatitude());
+                    data.setLongitude(addresses.get(0).getLongitude());
+                    runOnUiThread(() -> {
+                        txt_location.setText(String.format("Your location is: %s", address));
+
+                    });
+
+                }
+            };
+            geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1, listener );
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        new Thread(() -> apiDataRequestInitialization()).start();
+        new Thread(this::apiDataRequestInitialization).start();
     }
 
     //notification event handler
@@ -250,7 +251,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             toggleButtons(false);
             Log.d(TAG, "Notification button clicked");
             LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            View popupview = l.inflate(R.layout.popup_notification, null);
+            @SuppressLint("InflateParams") View popupview = l.inflate(R.layout.popup_notification, null);
             final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
             ImageButton btn_save = popupview.findViewById(R.id.btn_save);
@@ -264,12 +265,12 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             pop.setWidth(800);
             dropdown.getLayoutParams().width = 600;
 
-            btn_close.setOnClickListener((OnClickListener) v -> {
+            btn_close.setOnClickListener(v -> {
                 toggleButtons(true);
                 pop.dismiss();
             });
 
-            btn_save.setOnClickListener((OnClickListener) v -> {
+            btn_save.setOnClickListener(v -> {
                 Log.d(TAG, "Save button clicked");
                 int mins = Integer.parseInt(dropdown.getSelectedItem().toString().split(" ")[0]);
 
@@ -305,16 +306,14 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         Intent intent = new Intent(context, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Calculate the trigger time
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         calendar.add(Calendar.MINUTE, -mins);
 
-        // Set the alarm
         if (alarmManager != null) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
-        Toast.makeText(this, "Set notification "+mins+" before: "+time.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Set notification "+mins+" before: "+time, Toast.LENGTH_LONG).show();
     }
 
     public void toggleButtons(boolean boo){
@@ -336,17 +335,13 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         setNotification(newDate,0);
     }
 
+
     private void requestNotificationPermissions() {
         Log.d(TAG, "Check notification permission:");
         ActivityResultLauncher<String[]> notificationPermissionAccess = registerForActivityResult(new ActivityResultContracts .RequestMultiplePermissions(), result -> {
-                    Boolean scheduleExactAlarmGranted = null;
-                    Boolean useExactAlarmGranted = null;
-                    Boolean postNotficitaionGranted = null;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        scheduleExactAlarmGranted = result.getOrDefault(Manifest.permission.SCHEDULE_EXACT_ALARM, false);
-                        useExactAlarmGranted = result.getOrDefault(Manifest.permission.USE_EXACT_ALARM,false);
-                        postNotficitaionGranted = result.getOrDefault(Manifest.permission.POST_NOTIFICATIONS,false);
-                    }
+                    Boolean scheduleExactAlarmGranted = result.getOrDefault(Manifest.permission.SCHEDULE_EXACT_ALARM, false);
+                    Boolean useExactAlarmGranted = result.getOrDefault(Manifest.permission.USE_EXACT_ALARM,false);
+                    Boolean postNotficitaionGranted = result.getOrDefault(Manifest.permission.POST_NOTIFICATIONS,false);
                     if (scheduleExactAlarmGranted != null && scheduleExactAlarmGranted) {
                         Log.d(TAG, "Schedule exact alarm permission granted");
                     }
@@ -368,22 +363,44 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     public void openCamera(View view) {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(intent);
+        imgCaptureResultLauncher.launch(intent);
+        //startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    ActivityResultLauncher<Intent> imgCaptureResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        handleData(data);
+                    }
+                }
+    });
+
+
+
+    public void handleData(Intent intentData){
+        Bundle bundle = intentData.getExtras();
+        if (bundle != null) {
+            Bitmap finalPhoto = (Bitmap) bundle.get("data");
+
+            data.addPhoto(finalPhoto);
+            dbManager.addPhoto(data.getUsername(), finalPhoto);
+
+            for (Bitmap m:data.getPhotos()) {
+                Log.d(TAG, "Photo list element: "+m.toString());
+            }
+        }
     }
 
     public void openGallery(View view) {
         Intent intent = new Intent(SunActivity.this, GalleryActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        GalleryActivity.data = data;
         startActivity(intent);
     }
 
-    ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-
-                }
-            }
-    );
 }
+
+

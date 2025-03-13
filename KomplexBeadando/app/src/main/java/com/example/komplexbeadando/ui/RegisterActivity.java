@@ -28,8 +28,6 @@ import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 import com.example.komplexbeadando.User;
 
-import java.io.File;
-
 public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     DatabaseServiceManager dbManager;
@@ -43,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     CheckBox chb_remember;
 
     Boolean remember = false;
+    String horoscope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +67,13 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         chb_remember = findViewById(R.id.chb_remember);
 
         selectedDate = null;
+        horoscope = null;
     }
 
     public void Register(View view) {
         String username = txf_Usename.getText().toString();
         String psw = txf_Password.getText().toString();
-        if( username.equals(null) || psw.equals(null) || username.equals("") || psw.equals("") || username.equals(" ") || psw.equals(" ") || selectedDate.equals(null)){
+        if(username == null || psw == null || username.isEmpty() || psw.isEmpty() || username.equals(" ") || psw.equals(" ") || selectedDate == null || horoscope == null){
             Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
         }else{
             if(dbManager.checkUsernameFree(username)){
@@ -90,12 +90,11 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private AppData registerProcess(String username, String psw) {
-        dbManager.addUser(new User(username, psw, selectedDate));
+        dbManager.addUser(new User(username, psw, horoscope));
         User u = dbManager.getUser(username);
         u.setRemembered(remember);
         dbManager.updateUser(u);
-        AppData data = fillAppData(u);
-        return data;
+        return fillAppData(u);
     }
 
     public void Login(View view) {
@@ -131,11 +130,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(mCalendar.getTime());
         btn_pickDate.setText(selectedDate);
-
+        horoscope = dateToHoroscope(month, dayOfMonth);
     }
 
     public AppData fillAppData(User u){
-        String username = u.getUsername();
         String horoscope = u.getHoroscope();
         ApiHandler api = new ApiHandler();
         String dailydata = api.getDailyHoroscope(horoscope);
@@ -144,8 +142,23 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         String[] times = new String[2];
         times[0] = "";
         times[1]="";
-        AppData data = new AppData(username, horoscope, 0, 0, times, dailydata, weeklydata, monthlydata);
-        return data;
+        return new AppData(u, 0, 0, times, dailydata, weeklydata, monthlydata);
+    }
+
+    private String dateToHoroscope(int month, int day){
+        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Aries";
+        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taurus";
+        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return "Gemini";
+        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return "Cancer";
+        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "Leo";
+        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "Virgo";
+        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return "Libra";
+        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return "Scorpio";
+        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return "Sagittarius";
+        if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return "Capricorn";
+        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Aquarius";
+        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Pisces";
+        return "Values are out of bounds";
     }
 
     public void toggleRememeber(View view) {

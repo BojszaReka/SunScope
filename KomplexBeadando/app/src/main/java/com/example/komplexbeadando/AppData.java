@@ -1,6 +1,13 @@
 package com.example.komplexbeadando;
 
+import android.graphics.Bitmap;
+import android.widget.ArrayAdapter;
+
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AppData {
     public String username;
@@ -12,12 +19,14 @@ public class AppData {
     public String dailydata = "Getting data...";
     public String weeklydata = "Getting data...";
     public String monthlydata = "Getting data...";
+    List<Bitmap> photos;
 
-    // Empty constructor
     public AppData() {}
+
     public AppData(User user){
         username = user.getUsername();
         horoscope = user.getHoroscope();
+        setPhotos(user.getPhotos());
     }
 
     public AppData(User user, double longitude, double latitude, String[] times, String dailydata, String weeklydata, String monthlydata){
@@ -29,18 +38,7 @@ public class AppData {
         this.dailydata = dailydata;
         this.weeklydata = weeklydata;
         this.monthlydata = monthlydata;
-    }
-
-    // Constructor with parameters
-    public AppData(String username, String horoscope, double longitude, double latitude, String[] times, String dailydata, String weeklydata, String monthlydata) {
-        this.username = username;
-        this.horoscope = horoscope;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.times = times;
-        this.dailydata = dailydata;
-        this.weeklydata = weeklydata;
-        this.monthlydata = monthlydata;
+        setPhotos(user.getPhotos());
     }
 
     // Getters and Setters
@@ -116,7 +114,21 @@ public class AppData {
         this.monthlydata = monthlydata;
     }
 
+    public void addPhoto(Bitmap photo){
+        photos.add(photo);
+    }
+
+    public void setPhotos(List<Bitmap> photos){
+        this.photos = new ArrayList<>();
+        this.photos.addAll(photos);
+    }
+
+    public List<Bitmap> getPhotos(){
+        return photos;
+    }
+
     // toString method
+    @NonNull
     @Override
     public String toString() {
         return "AppData{" +
