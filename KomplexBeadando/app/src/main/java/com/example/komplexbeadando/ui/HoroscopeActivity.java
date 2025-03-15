@@ -3,7 +3,11 @@ package com.example.komplexbeadando.ui;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -32,6 +36,7 @@ import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 
 import java.util.Date;
+import java.util.Locale;
 
 public class HoroscopeActivity extends AppCompatActivity {
 
@@ -110,9 +115,9 @@ public class HoroscopeActivity extends AppCompatActivity {
 
     private void intializeAPIdata() {
         ApiHandler api = new ApiHandler();
-        data.setDailydata(api.getDailyHoroscope(data.getHoroscope()));
-        data.setWeeklydata(api.getWeeklyHoroscope(data.getHoroscope()));
-        data.setMonthlydata(api.getMonthlyHoroscope(data.getHoroscope()));
+        data.setDailydata(api.getDailyHoroscope(data.getHoroscope(), data.getAppLang()));
+        data.setWeeklydata(api.getWeeklyHoroscope(data.getHoroscope(), data.getAppLang()));
+        data.setMonthlydata(api.getMonthlyHoroscope(data.getHoroscope(), data.getAppLang()));
         displayDailyHoroscope();
     }
 
@@ -177,6 +182,8 @@ public class HoroscopeActivity extends AppCompatActivity {
             setAppLanguage(dropdown.getSelectedItem().toString());
             toggleButtons(true);
             pop.dismiss();
+            finish();
+            startActivity(getIntent());
         });
 
         btn_logOut.setOnClickListener(v -> {
@@ -209,6 +216,28 @@ public class HoroscopeActivity extends AppCompatActivity {
 
     public void setAppLanguage(String language){
         Log.d(TAG, "Setting app language to: "+language);
+        if(language.equals("English") || language.equals("Angol")){
+            Log.d(TAG, "Eng true");
+            setLocal(HoroscopeActivity.this, "en");
+        }
+        if(language.equals("Hungarian") || language.equals("Magyar")){
+            Log.d(TAG, "Hu true");
+            setLocal(HoroscopeActivity.this, "hu");
+        }
+    }
+
+    public void setLocal(Activity activity, String langcode){
+        Locale locale = new Locale(langcode);
+        locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+        SharedPreferences prefs = activity.getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("language", langcode);
+        editor.apply();
     }
 
     public void displayDailyHoroscope(View view) {

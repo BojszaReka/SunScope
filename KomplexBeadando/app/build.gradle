@@ -56,6 +56,8 @@ dependencies {
     implementation libs.androidx.material.icons.extended
     implementation libs.gson
 
+    implementation "com.deepl.api:deepl-java:1.9.0"
+
     def room_version = "2.6.1"
 
     implementation libs.androidx.room.runtime

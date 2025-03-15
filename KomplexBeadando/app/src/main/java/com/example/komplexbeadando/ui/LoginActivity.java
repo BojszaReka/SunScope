@@ -2,7 +2,11 @@ package com.example.komplexbeadando.ui;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -24,6 +28,12 @@ import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 import com.example.komplexbeadando.User;
 
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class LoginActivity extends AppCompatActivity {
 
     DatabaseServiceManager dbManager;
@@ -35,8 +45,12 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox chb_remember;
     Boolean remember = false;
 
+    String appLang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        loadLocale(this);
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
@@ -64,6 +78,28 @@ public class LoginActivity extends AppCompatActivity {
         if(u != null){
             LoginProcess(u);
         }
+    }
+
+    public void loadLocale(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+        String language = prefs.getString("language", "en"); // Default to English if not set
+        appLang = language;
+        Log.d(TAG, "App language set: "+appLang);
+        setLocal(activity, language);
+    }
+
+    public void setLocal(Activity activity, String langcode){
+        Locale locale = new Locale(langcode);
+        locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+        SharedPreferences prefs = activity.getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("language", langcode);
+        editor.apply();
     }
 
     public void Login(View view) {
@@ -119,14 +155,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public AppData fillAppData(User u){
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
         String horoscope = u.getHoroscope();
         ApiHandler api = new ApiHandler();
-        String dailydata = api.getDailyHoroscope(horoscope);
-        String weeklydata = api.getWeeklyHoroscope(horoscope);
-        String monthlydata = api.getMonthlyHoroscope(horoscope);
-        String[] times = new String[2];
-        times[0] = "";
-        times[1] = "";
-        return new AppData(u, 0, 0, times, dailydata, weeklydata, monthlydata);
+
+        Future<String> dailyFuture = executor.submit(() -> api.getDailyHoroscope(horoscope, appLang));
+        Future<String> weeklyFuture = executor.submit(() -> api.getWeeklyHoroscope(horoscope, appLang));
+        Future<String> monthlyFuture = executor.submit(() -> api.getMonthlyHoroscope(horoscope, appLang));
+
+        String dailydata = "";
+        String weeklydata = "";
+        String monthlydata = "";
+
+        try {
+            dailydata = dailyFuture.get();
+            weeklydata = weeklyFuture.get();
+            monthlydata = monthlyFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return new AppData(u, 0, 0, new String[]{"", ""}, dailydata, weeklydata, monthlydata, appLang);
     }
 }

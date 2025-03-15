@@ -2,8 +2,10 @@ package com.example.komplexbeadando.ui;
 
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -48,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     Boolean remember = false;
     String horoscope;
 
+    String appLang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
         selectedDate = null;
         horoscope = null;
+
+        SharedPreferences prefs = this.getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+        String language = prefs.getString("language", "en"); // Default to English if not set
+        appLang = language;
     }
 
     public void Register(View view) {
@@ -144,9 +152,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         String horoscope = u.getHoroscope();
         ApiHandler api = new ApiHandler();
 
-        Future<String> dailyFuture = executor.submit(() -> api.getDailyHoroscope(horoscope));
-        Future<String> weeklyFuture = executor.submit(() -> api.getWeeklyHoroscope(horoscope));
-        Future<String> monthlyFuture = executor.submit(() -> api.getMonthlyHoroscope(horoscope));
+        Future<String> dailyFuture = executor.submit(() -> api.getDailyHoroscope(horoscope, appLang));
+        Future<String> weeklyFuture = executor.submit(() -> api.getWeeklyHoroscope(horoscope, appLang));
+        Future<String> monthlyFuture = executor.submit(() -> api.getMonthlyHoroscope(horoscope, appLang));
 
         String dailydata = "";
         String weeklydata = "";
@@ -160,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             e.printStackTrace();
         }
 
-        return new AppData(u, 0, 0, new String[]{"", ""}, dailydata, weeklydata, monthlydata);
+        return new AppData(u, 0, 0, new String[]{"", ""}, dailydata, weeklydata, monthlydata, appLang);
     }
 
     private String dateToHoroscope(int month, int day){

@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.deepl.api.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -62,31 +63,57 @@ public class ApiHandler {
         return dates;
     }
 
-    public String getDailyHoroscope(String sign){
+    public String getDailyHoroscope(String sign, String lang){
         String apiresponse = getDailyHoroscopeAPI(sign);
         String horoscopedata = null;
         if(apiresponse != null){
             horoscopedata = deSerializeDailyHoroscopeResponse(apiresponse);
         }
-        return  horoscopedata;
+        return translateIfNeeded(horoscopedata, lang);
     }
 
-    public String getWeeklyHoroscope(String sign){
+
+
+    public String getWeeklyHoroscope(String sign, String lang){
         String apiresponse = getWeeklyHoroscopeAPI(sign);
         String horoscopedata = null;
         if(apiresponse != null){
             horoscopedata = deSerializeWeeklyHoroscopeResponse(apiresponse);
         }
-        return  horoscopedata;
+        return translateIfNeeded(horoscopedata, lang);
     }
 
-    public String getMonthlyHoroscope(String sign){
+    public String getMonthlyHoroscope(String sign, String lang){
         String apiresponse = getMonthlyHoroscopeAPI(sign);
         String horoscopedata = null;
         if(apiresponse != null){
             horoscopedata = deSerializeMonthlyHoroscopeResponse(apiresponse);
         }
-        return  horoscopedata;
+        return translateIfNeeded(horoscopedata, lang);
+    }
+
+    private String translateIfNeeded(String horoscopedata, String lang) {
+        if(lang.equals("hu")){
+            String translatedData = getTranslationFromAPI(horoscopedata);
+            return  translatedData;
+        }else{
+            return horoscopedata;
+        }
+    }
+
+
+    //key: 3bd0e7e8-9aee-460c-bc2f-dc5bea76c1f5:fx
+    private static String getTranslationFromAPI(String text){
+        String authKey = "3bd0e7e8-9aee-460c-bc2f-dc5bea76c1f5:fx";
+        Translator translator = new Translator(authKey);
+        try {
+            TextResult result = translator.translateText(text, null, "hu");
+            return result.getText();
+        } catch (DeepLException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static String getSunriseSunsetFromAPI(double lat, double lng, String date) {

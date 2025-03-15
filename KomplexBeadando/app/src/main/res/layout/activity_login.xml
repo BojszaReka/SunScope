@@ -88,7 +88,7 @@
 
     <CheckBox
         android:id="@+id/chb_remember"
-        android:layout_width="133dp"
+        android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginTop="45dp"
         android:buttonTint="#712110"
@@ -105,7 +105,7 @@
 
     <Button
         android:id="@+id/btn_Proceed"
-        android:layout_width="119dp"
+        android:layout_width="wrap_content"
         android:layout_height="44dp"
         android:layout_marginTop="55dp"
         android:backgroundTint="@color/burgundy"
@@ -118,7 +118,7 @@
 
     <Button
         android:id="@+id/btn_Redirect"
-        android:layout_width="189dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginBottom="36dp"
         android:backgroundTint="#00FFFFFF"

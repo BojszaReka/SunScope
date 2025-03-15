@@ -16,6 +16,10 @@ public class AppData {
     public String dailydata = "Getting data...";
     public String weeklydata = "Getting data...";
     public String monthlydata = "Getting data...";
+
+
+
+    public String appLang;
     List<Bitmap> photos;
 
     public AppData() {}
@@ -26,7 +30,7 @@ public class AppData {
         setPhotos(user.getPhotos());
     }
 
-    public AppData(User user, double longitude, double latitude, String[] times, String dailydata, String weeklydata, String monthlydata){
+    public AppData(User user, double longitude, double latitude, String[] times, String dailydata, String weeklydata, String monthlydata, String appLang){
         username = user.getUsername();
         horoscope = user.getHoroscope();
         this.longitude = longitude;
@@ -35,10 +39,20 @@ public class AppData {
         this.dailydata = dailydata;
         this.weeklydata = weeklydata;
         this.monthlydata = monthlydata;
+        this.appLang = appLang;
         setPhotos(user.getPhotos());
     }
 
     // Getters and Setters
+
+    public String getAppLang() {
+        return appLang;
+    }
+
+    public void setAppLang(String appLang) {
+        this.appLang = appLang;
+    }
+
     public String getUsername() {
         return username;
     }

@@ -10,6 +10,9 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -189,7 +192,9 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             Log.d(TAG, "Selected dropdown item: "+dropdown.getSelectedItem().toString());
             setAppLanguage(dropdown.getSelectedItem().toString());
             toggleButtons(true);
-             pop.dismiss();
+            pop.dismiss();
+            finish();
+            startActivity(getIntent());
         });
 
         btn_logOut.setOnClickListener(v -> {
@@ -213,7 +218,30 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
 
     public void setAppLanguage(String language){
         Log.d(TAG, "Setting app language to: "+language);
+        if(language.equals("English") || language.equals("Angol")){
+            Log.d(TAG, "Eng true");
+            setLocal(SunActivity.this, "en");
+        }
+        if(language.equals("Hungarian") || language.equals("Magyar")){
+            Log.d(TAG, "Hu true");
+            setLocal(SunActivity.this, "hu");
+        }
     }
+
+    public void setLocal(Activity activity, String langcode){
+        Locale locale = new Locale(langcode);
+        locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+        SharedPreferences prefs = activity.getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("language", langcode);
+        editor.apply();
+    }
+
 
 
     //Compass methods
