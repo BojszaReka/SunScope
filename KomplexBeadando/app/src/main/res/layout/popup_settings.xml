@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="90dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="90dp"
+    android:background="@drawable/bordergradientelement">
+
+
+    <TextView
+        android:id="@+id/txt_settingsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bricolage_grotesque_semibold"
+        android:text="Settings"
+        android:textColor="@color/burgundy"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.104" />
+
+    <Spinner
+        android:id="@+id/spn_langDropwon"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:background="@drawable/corneredbordergradientelement"
+        android:popupBackground="@drawable/bordergradientelement"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_settingsTitle"
+        app:layout_constraintVertical_bias="0.265" />
+
+    <TextView
+        android:id="@+id/txt_langTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="App language:"
+        android:textColor="@color/orange"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/spn_langDropwon"
+        app:layout_constraintEnd_toEndOf="@+id/spn_langDropwon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spn_langDropwon"
+        app:layout_constraintTop_toBottomOf="@+id/txt_settingsTitle"
+        app:layout_constraintVertical_bias="0.91" />
+
+    <Button
+        android:id="@+id/btn_saveSetting"
+        android:layout_width="244dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/burgundy"
+        android:text="Save setting"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/spn_langDropwon"
+        app:layout_constraintStart_toStartOf="@+id/spn_langDropwon"
+        app:layout_constraintTop_toBottomOf="@+id/spn_langDropwon"
+        app:layout_constraintVertical_bias="0.037" />
+
+    <Button
+        android:id="@+id/btn_logOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/fadedburgundy"
+        android:fontFamily="@font/bricolage_grotesque"
+        android:text="Log out"
+        android:textColor="@color/burgundy"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_saveSetting"
+        app:layout_constraintVertical_bias="0.662" />
+
+    <ImageButton
+        android:id="@+id/btn_closePopup"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/burgundy"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.034"
+        app:srcCompat="@android:drawable/btn_dialog" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

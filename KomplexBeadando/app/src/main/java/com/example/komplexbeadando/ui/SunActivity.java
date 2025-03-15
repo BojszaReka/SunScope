@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -163,6 +164,46 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     }
 
     public void settingButtonClicked(View view) {
+            toggleButtons(false);
+            Log.d(TAG, "Settings button clicked");
+            LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+            @SuppressLint("InflateParams") View popupview = l.inflate(R.layout.popup_settings, null);
+            final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
+            Button btn_save = popupview.findViewById(R.id.btn_saveSetting);
+            Button btn_logOut = popupview.findViewById(R.id.btn_logOut);
+
+            Spinner dropdown = popupview.findViewById(R.id.spn_langDropwon);
+            String[] items = new String[] {"English", "Hungarian"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            dropdown.setAdapter(adapter);
+            pop.setWidth(800);
+            dropdown.getLayoutParams().width = 600;
+
+            btn_close.setOnClickListener(v -> {
+                toggleButtons(true);
+                pop.dismiss();
+            });
+
+            btn_save.setOnClickListener(v -> {
+                Log.d(TAG, "Save button clicked");
+                Log.d(TAG, "Selected dropdown item: "+dropdown.getSelectedItem().toString());
+                setAppLanguage(dropdown.getSelectedItem().toString());
+                toggleButtons(true);
+                pop.dismiss();
+            });
+
+            btn_logOut.setOnClickListener(v -> {
+                toggleButtons(true);
+                pop.dismiss();
+                logOutUser();
+            });
+
+
+            pop.showAsDropDown(txt_sunrise, 50, -600);
+    }
+
+    public void logOutUser(){
         boolean result = dbManager.updateUserOnLogout(data.getUsername());
         if(!result){
             Intent intent = new Intent(SunActivity.this, LoginActivity.class);
@@ -170,6 +211,10 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             startActivity(intent);
             finish();
         }
+    }
+
+    public void setAppLanguage(String language){
+        Log.d(TAG, "Setting app language to: "+language);
     }
 
 
@@ -323,7 +368,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         if (alarmManager != null) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
-        Toast.makeText(this, "Set notification "+mins+" minutes before: "+formattedDate, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.format("Set notification %d minutes before: %s", mins, formattedDate), Toast.LENGTH_LONG).show();
     }
 
     public void toggleButtons(boolean boo){
@@ -332,16 +377,16 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         findViewById(R.id.btn_notification).setClickable(boo);
         findViewById(R.id.btn_gallery).setClickable(boo);
         findViewById(R.id.btn_camera).setClickable(boo);
+        findViewById(R.id.btn_settings).setClickable(boo);
+        findViewById(R.id.btn_pickDateSuntime).setClickable(boo);
     }
 
     public void sendTestNotification(){
         Date currentDate = new Date();
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.MINUTE, 1);
         Date newDate = calendar.getTime();
-
         setNotification(newDate,0);
     }
 

@@ -100,6 +100,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void LoginProcess(User u){
+        if(u.getHoroscope().equals("Saggitarius")){
+            u.setHoroscope("Sagittarius");
+        }
         Log.d(TAG, "Logged in: "+u.getUsername());
         Intent intent = new Intent(LoginActivity.this, SunActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
