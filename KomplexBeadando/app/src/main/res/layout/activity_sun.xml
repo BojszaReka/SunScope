@@ -43,16 +43,29 @@
         tools:srcCompat="@drawable/bordergradientelement" />
 
     <TextView
-        android:id="@+id/txt_UserName"
+        android:id="@+id/txt_hello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
         android:fontFamily="@font/bricolage_grotesque_bold"
-        android:text="Hello, user!"
+        android:text="@string/hello"
         android:textColor="@color/burgundy"
         android:textSize="30dp"
         app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
+        app:layout_constraintTop_toTopOf="@+id/img_cimhatter" />
+
+    <TextView
+        android:id="@+id/txt_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/bricolage_grotesque_bold"
+        android:text=":dispUsr:"
+        android:textColor="@color/burgundy"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/txt_hello"
         app:layout_constraintTop_toTopOf="@+id/img_cimhatter" />
 
     <TextView
@@ -62,7 +75,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="64dp"
         android:fontFamily="@font/bricolage_grotesque_bold"
-        android:text="Todays date"
+        android:text=":dispDate:"
         android:textColor="@color/burgundy"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="@+id/img_cimhatter"
@@ -75,7 +88,7 @@
         android:layout_marginStart="44dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/bricolage_grotesque_bold"
-        android:text="Sundial"
+        android:text="@string/sundial"
         android:textColor="@color/white"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_Sundial"
@@ -88,7 +101,7 @@
         android:layout_marginStart="39dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/bricolage_grotesque_bold"
-        android:text="Horoscope"
+        android:text="@string/horoscope"
         android:textColor="@color/white"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_Horoscope"
@@ -181,17 +194,32 @@
         android:id="@+id/txt_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
-        android:fontFamily="@font/bricolage_grotesque_medium"
-        android:text="Your current location is: xx"
-        android:textColor="@color/orange"
-        android:textSize="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="128dp"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        android:text="@string/your_current_location_is"
         android:textAlignment="center"
+        android:textColor="@color/orange"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_dispLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="39dp"
+        android:text=":dispLocation:"
+        android:textAlignment="center"
+        android:textColor="@color/orange"
+        android:textSize="15dp"
+        android:fontFamily="@font/bricolage_grotesque_medium"
+        app:layout_constraintBottom_toTopOf="@+id/btn_pickDateSuntime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_location" />
 
     <ImageView
         android:id="@+id/img_arch"
@@ -282,7 +310,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bricolage_grotesque_medium"
-        android:text="Sunrise and sunset at:"
+        android:text="@string/sunrise_and_sunset_at"
         android:textColor="@color/fadedburgundy"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_arch"
@@ -297,7 +325,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bricolage_grotesque_medium"
-        android:text="date"
+        android:text=":date:"
         android:textColor="@color/fadedburgundy"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/img_arch"
@@ -310,17 +338,17 @@
         android:layout_width="160dp"
         android:layout_height="42dp"
         android:layout_marginTop="48dp"
+        android:layout_marginBottom="28dp"
         android:backgroundTint="@color/fadedburgundy"
         android:onClick="newDate"
-        android:text="Pick a different day"
+        android:text="@string/pick_a_different_day"
         android:textSize="12dp"
-        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_gallery"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_notification"
         app:layout_constraintTop_toBottomOf="@+id/txt_location"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,7 @@
 package com.example.komplexbeadando;
 
 import android.graphics.Bitmap;
-import android.widget.ArrayAdapter;
-
 import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

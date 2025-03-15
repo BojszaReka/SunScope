@@ -24,11 +24,6 @@ import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 import com.example.komplexbeadando.User;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class LoginActivity extends AppCompatActivity {
 
     DatabaseServiceManager dbManager;
@@ -53,17 +48,6 @@ public class LoginActivity extends AppCompatActivity {
 
         dbManager = new DatabaseServiceManager(getApplicationContext());
 
-        /*
-        List<User> users  = dbManager.getAllUsers();
-        String usernames = "";
-        for (User u: users) {
-            u.setPhotos(new ArrayList<>());
-            dbManager.updateUser(u);
-        }
-        Log.d(TAG, "Users: "+usernames);
-        */
-        //bogyo user user2
-
         initializeActivity();
         checkRememberedUser();
     }
@@ -86,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         String username = txf_Usename.getText().toString();
         String psw = txf_Password.getText().toString();
         if( username.equals(null) || psw.equals(null) || username.isEmpty() || psw.isEmpty() || username.equals(" ") || psw.equals(" ")){
-            Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.some_input_field_may_be_empty), Toast.LENGTH_LONG).show();
         }else{
             if(dbManager.authenticateUser(username,psw)){
                 User u = dbManager.getUser(username);
@@ -94,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 dbManager.updateUser(u);
                 LoginProcess(u);
             }else{
-                Toast.makeText(this, "Rossz bejelentkezési adatok!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.wrong_login_information), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -71,7 +71,7 @@ public class HoroscopeActivity extends AppCompatActivity {
 
     public void initializeActivity(){
 
-        txt_UserName = findViewById(R.id.txt_UserName);
+        txt_UserName = findViewById(R.id.txt_username);
         txt_todaysDate = findViewById(R.id.txt_date);
         txt_zodiacSign = findViewById(R.id.txt_zodiacSign);
         txt_typeIndicator = findViewById(R.id.txt_typeIndicator);
@@ -85,9 +85,27 @@ public class HoroscopeActivity extends AppCompatActivity {
         Date d = new Date();
         CharSequence s  = DateFormat.format("MMMM d", d.getTime());
 
-        setupUI(txt_UserName, "Hello, "+data.getUsername());
+        setupUI(txt_UserName, data.getUsername());
         setupUI(txt_todaysDate, s.toString());
-        setupUI(txt_zodiacSign, data.getHoroscope());
+        setupUI(txt_zodiacSign, getZodiac());
+    }
+
+    private String getZodiac() {
+        switch(data.getHoroscope()){
+            case "Aries": return getString(R.string.aries);
+            case "Taurus": return getString(R.string.taurus);
+            case "Gemini": return getString(R.string.gemini);
+            case "Cancer": return getString(R.string.cancer);
+            case "Leo": return getString(R.string.leo);
+            case "Virgo": return getString(R.string.virgo);
+            case "Libra": return getString(R.string.libra);
+            case "Scorpio": return getString(R.string.scorpio);
+            case "Sagittarius": return getString(R.string.sagittarius);
+            case "Capricorn": return getString(R.string.capricorn);
+            case "Aquarius": return getString(R.string.aquarius);
+            case "Pisces": return getString(R.string.pisces);
+            default: return "";
+        }
     }
 
     private void intializeAPIdata() {
@@ -130,18 +148,19 @@ public class HoroscopeActivity extends AppCompatActivity {
         finish();
     }
 
+    @SuppressLint("InflateParams")
     public void settingButtonClicked(View view) {
         toggleButtons(false);
         Log.d(TAG, "Settings button clicked");
         LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View popupview = l.inflate(R.layout.popup_settings, null);
+        View popupview = l.inflate(R.layout.popup_settings, null);
         final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
         Button btn_save = popupview.findViewById(R.id.btn_saveSetting);
         Button btn_logOut = popupview.findViewById(R.id.btn_logOut);
 
         Spinner dropdown = popupview.findViewById(R.id.spn_langDropwon);
-        String[] items = new String[] {"English", "Hungarian"};
+        String[] items = new String[] {getString(R.string.english), getString(R.string.hungarian)};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         pop.setWidth(800);
@@ -198,7 +217,7 @@ public class HoroscopeActivity extends AppCompatActivity {
 
     public void displayDailyHoroscope() {
         runOnUiThread(() -> {
-            setupUI(txt_typeIndicator, "Daily");
+            setupUI(txt_typeIndicator, getString(R.string.daily));
             setupUI(txt_horoscopeDescription, data.getDailydata());
             tab1.getLayoutParams().width = 175;
             tab1.requestLayout();
@@ -210,7 +229,7 @@ public class HoroscopeActivity extends AppCompatActivity {
     }
 
     public void displayWeeklyHoroscope(View view) {
-        setupUI(txt_typeIndicator, "Weekly");
+        setupUI(txt_typeIndicator, getString(R.string.weekly));
         setupUI(txt_horoscopeDescription, data.getWeeklydata());
         tab2.getLayoutParams().width = 175;
         tab2.requestLayout();
@@ -221,7 +240,7 @@ public class HoroscopeActivity extends AppCompatActivity {
     }
 
     public void displayMonthlyHoroscope(View view) {
-        setupUI(txt_typeIndicator, "Monthly");
+        setupUI(txt_typeIndicator, getString(R.string.monthly));
         setupUI(txt_horoscopeDescription, data.getMonthlydata());
         tab3.getLayoutParams().width = 175;
         tab3.requestLayout();

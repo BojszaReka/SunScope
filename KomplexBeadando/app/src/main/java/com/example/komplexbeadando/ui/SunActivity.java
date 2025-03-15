@@ -51,8 +51,6 @@ import com.example.komplexbeadando.DatabaseServiceManager;
 import com.example.komplexbeadando.R;
 
 import java.text.SimpleDateFormat;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -104,16 +102,16 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     public void initializeActivity(){
         TextView txt_dateOfSuntime = findViewById(R.id.txt_dateOfSuntime);
 
-        txt_UserName = findViewById(R.id.txt_UserName);
+        txt_UserName = findViewById(R.id.txt_username);
         txt_todaysDate = findViewById(R.id.txt_date);
-        txt_location = findViewById(R.id.txt_location);
+        txt_location = findViewById(R.id.txt_dispLocation);
         txt_sunrise = findViewById(R.id.txt_sunriseTime);
         txt_sunset = findViewById(R.id.txt_sunsetTime);
 
         Date d = new Date();
         CharSequence s  = DateFormat.format("MMMM d", d.getTime());
 
-        txt_UserName.setText(String.format("Hello, %s", data.getUsername()));
+        txt_UserName.setText(data.getUsername());
         txt_todaysDate.setText(s);
         txt_dateOfSuntime.setText(s);
 
@@ -163,44 +161,44 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         finish();
     }
 
+    @SuppressLint("InflateParams")
     public void settingButtonClicked(View view) {
-            toggleButtons(false);
-            Log.d(TAG, "Settings button clicked");
-            LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            @SuppressLint("InflateParams") View popupview = l.inflate(R.layout.popup_settings, null);
-            final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
-            Button btn_save = popupview.findViewById(R.id.btn_saveSetting);
-            Button btn_logOut = popupview.findViewById(R.id.btn_logOut);
+        toggleButtons(false);
+        Log.d(TAG, "Settings button clicked");
+        LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupview = l.inflate(R.layout.popup_settings, null);
+        final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
+        Button btn_save = popupview.findViewById(R.id.btn_saveSetting);
+        Button btn_logOut = popupview.findViewById(R.id.btn_logOut);
 
-            Spinner dropdown = popupview.findViewById(R.id.spn_langDropwon);
-            String[] items = new String[] {"English", "Hungarian"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-            dropdown.setAdapter(adapter);
-            pop.setWidth(800);
-            dropdown.getLayoutParams().width = 600;
+        Spinner dropdown = popupview.findViewById(R.id.spn_langDropwon);
+        String[] items = new String[] {getString(R.string.english), getString(R.string.hungarian)};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+        pop.setWidth(800);
+        dropdown.getLayoutParams().width = 600;
 
-            btn_close.setOnClickListener(v -> {
-                toggleButtons(true);
-                pop.dismiss();
-            });
+        btn_close.setOnClickListener(v -> {
+            toggleButtons(true);
+            pop.dismiss();
+        });
 
-            btn_save.setOnClickListener(v -> {
-                Log.d(TAG, "Save button clicked");
-                Log.d(TAG, "Selected dropdown item: "+dropdown.getSelectedItem().toString());
-                setAppLanguage(dropdown.getSelectedItem().toString());
-                toggleButtons(true);
-                pop.dismiss();
-            });
+        btn_save.setOnClickListener(v -> {
+            Log.d(TAG, "Save button clicked");
+            Log.d(TAG, "Selected dropdown item: "+dropdown.getSelectedItem().toString());
+            setAppLanguage(dropdown.getSelectedItem().toString());
+            toggleButtons(true);
+             pop.dismiss();
+        });
 
-            btn_logOut.setOnClickListener(v -> {
-                toggleButtons(true);
-                pop.dismiss();
-                logOutUser();
-            });
+        btn_logOut.setOnClickListener(v -> {
+            toggleButtons(true);
+            pop.dismiss();
+            logOutUser();
+        });
 
-
-            pop.showAsDropDown(txt_sunrise, 50, -600);
+        pop.showAsDropDown(txt_sunrise, 50, -600);
     }
 
     public void logOutUser(){
@@ -277,17 +275,15 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     public void onLocationChanged(@NonNull Location location) {
         try {
             Geocoder geocoder = new Geocoder(SunActivity.this, Locale.getDefault());
-
             Geocoder.GeocodeListener listener = addresses -> {
                 if (addresses != null) {
                     String address = addresses.get(0).getAddressLine(0);
                     data.setLatitude(addresses.get(0).getLatitude());
                     data.setLongitude(addresses.get(0).getLongitude());
                     runOnUiThread(() -> {
-                        txt_location.setText(String.format("Your location is: %s", address));
+                        txt_location.setText(address);
 
                     });
-
                 }
             };
             geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1, listener );
@@ -298,12 +294,13 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     }
 
     //notification event handler
+    @SuppressLint("InflateParams")
     public void notificationButtonClick(View view) {
         if(data.dates != null && data.dates[0]!=null && data.dates[1] != null){
             toggleButtons(false);
             Log.d(TAG, "Notification button clicked");
             LayoutInflater l = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            @SuppressLint("InflateParams") View popupview = l.inflate(R.layout.popup_notification, null);
+            View popupview = l.inflate(R.layout.popup_notification, null);
             final PopupWindow pop = new PopupWindow(popupview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ImageButton btn_close = popupview.findViewById(R.id.btn_closePopup);
             ImageButton btn_save = popupview.findViewById(R.id.btn_save);
@@ -311,7 +308,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
             RadioButton rbtn_sunset = popupview.findViewById(R.id.rbtn_sunset);
 
             Spinner dropdown = popupview.findViewById(R.id.spn_dropwon);
-            String[] items = new String[] {"5 mins before", "10 mins before", "15 mins before", "30 mins before", "45 mins before", "60 mins before"};
+            String[] items = new String[] {getString(R.string._5_mins_before), getString(R.string._10_mins_before), getString(R.string._15_mins_before), getString(R.string._30_mins_before), getString(R.string._45_mins_before), getString(R.string._60_mins_before)};
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
             dropdown.setAdapter(adapter);
             pop.setWidth(800);
@@ -324,22 +321,20 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
 
             btn_save.setOnClickListener(v -> {
                 Log.d(TAG, "Save button clicked");
-                int mins = Integer.parseInt(dropdown.getSelectedItem().toString().split(" ")[0]);
-
                 Log.d(TAG, "Selected dropdown item: "+dropdown.getSelectedItem().toString());
 
+                int mins = Integer.parseInt(dropdown.getSelectedItem().toString().split(" ")[0]);
 
                 if(rbtn_sunrise.isChecked() && !rbtn_sunset.isChecked()){
-                    Log.d(TAG, "Sunrise selected, dropdown item: "+dropdown.getSelectedItem().toString());
                     setNotification(data.dates[0],mins);
 
+                    Log.d(TAG, "Sunrise selected, dropdown item: "+dropdown.getSelectedItem().toString());
                     sendTestNotification();
-
                 }
                 if(!rbtn_sunrise.isChecked() && rbtn_sunset.isChecked()){
-                    Log.d(TAG, "Sunrise selected, dropdown item: "+dropdown.getSelectedItem().toString());
                     setNotification(data.dates[1],mins);
 
+                    Log.d(TAG, "Sunrise selected, dropdown item: "+dropdown.getSelectedItem().toString());
                     sendTestNotification();
                 }
                 toggleButtons(true);
@@ -368,7 +363,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         if (alarmManager != null) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
-        Toast.makeText(this, String.format("Set notification %d minutes before: %s", mins, formattedDate), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, ""+getString(R.string.set_notification_toast)+mins+getString(R.string.minutes_before)+formattedDate , Toast.LENGTH_LONG).show();
     }
 
     public void toggleButtons(boolean boo){
@@ -456,7 +451,7 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
     public void newDate(View view) {
         com.example.komplexbeadando.ui.DatePicker mDatePickerDialogFragment;
         mDatePickerDialogFragment = new com.example.komplexbeadando.ui.DatePicker();
-        mDatePickerDialogFragment.show(getSupportFragmentManager(), "DATE PICK");
+        mDatePickerDialogFragment.show(getSupportFragmentManager(), getString(R.string.date_pick));
     }
 
     @Override
@@ -465,7 +460,6 @@ public class SunActivity extends AppCompatActivity implements SensorEventListene
         mCalendar.set(android.icu.util.Calendar.YEAR, year);
         mCalendar.set(android.icu.util.Calendar.MONTH, month);
         mCalendar.set(android.icu.util.Calendar.DAY_OF_MONTH, dayOfMonth);
-        String selectedDate = android.icu.text.DateFormat.getDateInstance(android.icu.text.DateFormat.FULL).format(mCalendar.getTime());
         TextView txt_dateOfSuntime = findViewById(R.id.txt_dateOfSuntime);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());

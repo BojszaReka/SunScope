@@ -1,5 +1,7 @@
 package com.example.komplexbeadando.ui;
 
+import static android.provider.Settings.System.getString;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -22,7 +24,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.bellicon)
                 .setContentTitle("SunScope")
-                .setContentText("Watch out! The sun is passing the horizon!")
+                .setContentText(context.getString(R.string.watch_out_the_sun_is_passing_the_horizon))
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         notificationManager.notify(1, builder.build());

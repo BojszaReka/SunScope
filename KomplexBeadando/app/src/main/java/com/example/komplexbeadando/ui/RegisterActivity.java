@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         String username = txf_Usename.getText().toString();
         String psw = txf_Password.getText().toString();
         if(username == null || psw == null || username.isEmpty() || psw.isEmpty() || username.equals(" ") || psw.equals(" ") || selectedDate == null || horoscope == null){
-            Toast.makeText(this, "Beviteli mező(k) üres(ek)!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.some_input_field_may_be_empty), Toast.LENGTH_LONG).show();
         }else{
             if(dbManager.checkUsernameFree(username)){
                 AppData data = registerProcess(username, psw);
@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                 startActivity(intent);
                 finish();
             }else{
-                Toast.makeText(this, "A felhasználónév foglalt!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.the_username_is_taken), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -124,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     public void selectDate(View view) {
         com.example.komplexbeadando.ui.DatePicker mDatePickerDialogFragment;
         mDatePickerDialogFragment = new com.example.komplexbeadando.ui.DatePicker();
-        mDatePickerDialogFragment.show(getSupportFragmentManager(), "DATE PICK");
+        mDatePickerDialogFragment.show(getSupportFragmentManager(), getString(R.string.date_pick));
     }
 
     @Override
@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         String monthlydata = "";
 
         try {
-            dailydata = dailyFuture.get();  // Waits for the API call to complete
+            dailydata = dailyFuture.get();
             weeklydata = weeklyFuture.get();
             monthlydata = monthlyFuture.get();
         } catch (InterruptedException | ExecutionException e) {
